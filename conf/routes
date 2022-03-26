@@ -1,0 +1,32 @@
+# Маршруты
+GET         /                                 controllers.FrontendController.index()
+
+# Пользователи
+GET         /api/signOut                          controllers.SignInController.signOut()
+
+POST        /api/signIn                           controllers.SignInController.submit
+
+PUT         /api/password/change                  controllers.ChangePasswordController.submit
+PUT         /api/users/:userId/role               controllers.UserController.changeUserRole(userId: java.util.UUID)
+
+GET         /api/users                            controllers.UserController.listAll()
+GET         /api/users/:userId                    controllers.UserController.getUserByID(userId: java.util.UUID)
+POST        /api/users                            controllers.SignUpController.submit
+DELETE      /api/users/:userId                    controllers.UserController.delete(userId: java.util.UUID)
+
+# События
+GET         /api/events                           controllers.EventController.listAll()
+GET         /api/events/:eventId                  controllers.EventController.getEventByID(eventId: Long)
+POST        /api/events                           controllers.EventController.createEvent()
+PUT         /api/events/:eventId                  controllers.EventController.updateEvent(eventId: Long)
+DELETE      /api/events/:eventId                  controllers.EventController.deleteEvent(eventId: Long)
+
+# Объекты
+GET        /api/items                             controllers.ItemController.listAll()
+GET        /api/items/:itemId                     controllers.ItemController.getItemByID(itemId: Long)
+POST       /api/items                             controllers.ItemController.saveItem(itemId: Long = -1)
+PUT        /api/items/:itemId                     controllers.ItemController.saveItem(itemId: Long)
+DELETE     /api/items/:itemId                     controllers.ItemController.deleteItem(itemId: Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

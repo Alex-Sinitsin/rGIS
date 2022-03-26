@@ -1,0 +1,61 @@
+# https://www.playframework.com/documentation/latest/ScalaI18N
+
+# Пользовательские сообщения
+
+success.password.changed = Пароль успешно изменен!
+current.password.invalid = Текущий пароль введен не правильно!
+
+# Сообщения по-умолчанию
+
+# --- Ограничения
+constraint.required = Обязательное поле
+constraint.min=Минимальное значение: {0}
+constraint.max=Максимальное значение: {0}
+constraint.minLength=Минимальная длина: {0}
+constraint.maxLength=Максимальная длина: {0}
+constraint.email=Электронная почта
+constraint.pattern=Обязательный формат: {0}
+
+# --- Форматы
+format.date=Дата (''{0}'')
+format.numeric=Числовой
+format.real=Вещественный
+format.uuid=UUID
+
+# --- Шаблоны для форматов
+formats.date=yyyy-MM-dd
+
+# --- Errors
+error.invalid=Неверное значение
+error.invalid.java.util.Date=Неверное значение даты
+error.required=Заполните обязательное поле
+error.number=Требуется числовое значение
+error.real=Требуется вещественное значение
+error.min=Должно быть больше или равно {0}
+error.min.strict=Должно быть строго больше, чем {0}
+error.max=Должно быть меньше или равно {0}
+error.max.strict=Должно быть строго меньше, чем {0}
+error.minLength=Минимальная длина {0}
+error.maxLength=Максимальная длина {0}
+error.email=Требуется действующий адрес электронной почты
+error.pattern=Должен удовлетворить {0}
+error.date=Требуется действительная дата
+error.uuid=Требуется действительный UUID
+
+error.expected.date=Ожидалось значение даты
+error.expected.date.isoformat=Ожидалось значение даты в формате ISO
+error.expected.time=Ожидалось значение времени
+error.expected.jsarray=Ожидался массив данных
+error.expected.jsboolean=Ожидалось булево значение
+error.expected.jsnumber=Ожидалось числовое значение
+error.expected.jsobject=Ожидалось значение объекта
+error.expected.jsstring=Ожидалось строковое значение
+error.expected.jsnumberorjsstring=Ожидалось числовое или строковое значение
+error.expected.keypathnode=Ожидалось значение узла
+error.expected.uuid=Ожидалось значение UUID
+error.expected.validenumvalue=Ожидалось допустимое значение перечисления
+error.expected.enumstring=Ожидалось строковое значение перечисления
+
+error.path.empty=Пустой путь
+error.path.missing=Отсутствующий путь
+error.path.result.multiple=Несколько результатов для заданного пути

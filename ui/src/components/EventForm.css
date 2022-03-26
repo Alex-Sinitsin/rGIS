@@ -1,0 +1,36 @@
+.title-form{
+    font-weight: bold;
+    font-size: large;
+    text-align: center;
+    margin-bottom: 10%;
+}
+
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+.card-container.card {
+    padding: 20px 15px;
+    margin-top: 15px;
+}
+
+.card {
+    background-color: #f7f7f7;
+    padding: 20px 25px 30px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 3px;
+}
+
+.eventSubmitBtn.btn {
+    display: block !important;
+    width: 100%;
+    margin-top: 16px;
+    padding: 7px 0;
+}
+
+.required-field {
+    color: red;
+}
