@@ -12,7 +12,8 @@ object ItemForm {
   val form: Form[Item] = Form(
     mapping(
       "id" -> ignored(-1L),
-      "name" -> nonEmptyText
+      "name" -> nonEmptyText,
+      "address" -> nonEmptyText
     )(Item.apply)(Item.unapply)
   )
 }

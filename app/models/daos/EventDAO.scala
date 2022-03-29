@@ -59,7 +59,7 @@ class EventDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider
    */
   def add(event: Event): Future[Event] = {
     db.run(events +=
-        Event(event.id, event.title, event.startDateTime, event.endDateTime, event.orgUserId, event.members, event.itemId, event.description))
+        Event(event.id, event.title, event.startDateTime, event.endDateTime, event.orgUserId, event.itemId, event.description))
       .map(_ => event)
   }
 
@@ -71,8 +71,8 @@ class EventDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider
    */
   def update(event: Event): Future[Event] =
     db.run(events.filter(_.id === event.id)
-      .map(evt => (evt.title, evt.startDateTime, evt.endDateTime, evt.orgUserId, evt.members, evt.itemId, evt.description))
-      .update((event.title, event.startDateTime, event.endDateTime, event.orgUserId, Some(Json.toJson(event.members)), event.itemId, event.description)).map(_ => event))
+      .map(evt => (evt.title, evt.startDateTime, evt.endDateTime, evt.orgUserId, evt.itemId, evt.description))
+      .update((event.title, event.startDateTime, event.endDateTime, event.orgUserId, event.itemId, event.description)).map(_ => event))
 
   /**
    * Удаляет данные события

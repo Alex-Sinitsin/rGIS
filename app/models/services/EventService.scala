@@ -66,9 +66,8 @@ class EventService @Inject()(userDAO: UserDAO, eventDAO: EventDAO)(implicit ex: 
         case Some(_) => Future.successful(EventAlreadyExists)
         case None =>
           for {
-            memberUsers <- userDAO.findUsersByID(members).map(data => data.toList)
             createdEvent <-
-              eventDAO.add(Event(-1, eventData.title, eventData.startDateTime, newEndDateTime, UUID.fromString(eventData.orgUserID), Some(Json.obj("users" -> Json.toJson(memberUsers))), eventData.itemID, eventData.description))
+              eventDAO.add(Event(-1, eventData.title, eventData.startDateTime, newEndDateTime, UUID.fromString(eventData.orgUserID), eventData.itemID, eventData.description))
           } yield EventCreated(createdEvent)
       }
     }
@@ -86,8 +85,7 @@ class EventService @Inject()(userDAO: UserDAO, eventDAO: EventDAO)(implicit ex: 
   private def updateEventFunction(eventID: Long, eventData: EventData, members: List[UUID], newEndDateTime: LocalDateTime, currentUser: User): Future[EventResult] = {
     if (currentUser.id == UUID.fromString(eventData.orgUserID) || currentUser.role.contains("Admin"))
       for {
-        memberUsers <- userDAO.findUsersByID(members).map(data => data.toList)
-        updatedEvent <- eventDAO.update(Event(eventID, eventData.title, eventData.startDateTime, newEndDateTime, UUID.fromString(eventData.orgUserID), Some(Json.obj("users" -> Json.toJson(memberUsers))), eventData.itemID, eventData.description))
+        updatedEvent <- eventDAO.update(Event(eventID, eventData.title, eventData.startDateTime, newEndDateTime, UUID.fromString(eventData.orgUserID), eventData.itemID, eventData.description))
       } yield EventUpdated(updatedEvent)
     else Future.successful(EventCreatedByAnotherUser("update"))
   }
