@@ -26,7 +26,8 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   guice,
   filters,
-  evolutions
+  evolutions,
+  ws
 )
 
 scalacOptions ++= Seq(

@@ -6,37 +6,48 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import forms.ItemForm
 import models.services._
 import play.api.libs.json.Json
+import play.api.libs.ws._
 import play.api.mvc._
 import utils.auth.{HasSignUpMethod, JWTEnvironment}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ItemController @Inject()(silhouette: Silhouette[JWTEnvironment],
+
+class ItemController @Inject()(ws: WSClient,
+                               silhouette: Silhouette[JWTEnvironment],
                                controllerComponents: ControllerComponents,
                                itemService: ItemService,
                                hasSignUpMethod: HasSignUpMethod)
                               (implicit ex: ExecutionContext) extends AbstractController(controllerComponents) {
 
   /**
-   * Выводит список всех объектов
-   *
-   * @return
-   */
-  def listAll(): Action[AnyContent] = silhouette.SecuredAction.async {
+    * Выводит список всех объектов
+    *
+    * @return
+    */
+    //TODO: Запрос к API 2gis
+  def listAll(): Action[AnyContent] = silhouette.UnsecuredAction.async {
     implicit request: Request[AnyContent] =>
 
-      itemService.retrieveAll.flatMap { items =>
-        Future.successful(Ok(Json.toJson(items)).withHeaders("X-Total-Count" -> items.size.toString))
-      }
+//      val request: WSRequest = ws.url("https://catalog.api.2gis.com/3.0/region/search")
+//        .addQueryStringParameters("q" -> "Екатеринбург", "key" -> "")
+//        .addHttpHeaders("Accept" -> "application/json")
+
+//      request.get().map(rsp => Ok(rsp.json))
+
+    //      itemService.retrieveAll.flatMap { items =>
+    //        Future.successful(Ok(Json.toJson(items)).withHeaders("X-Total-Count" -> items.size.toString))
+    //      }
+      Future.successful(Ok(""))
   }
 
   /**
-   * Получает данные об объекте по его ID
-   *
-   * @param itemID ID объекта
-   * @return
-   */
+    * Получает данные об объекте по его ID
+    *
+    * @param itemID ID объекта
+    * @return
+    */
   def getItemByID(itemID: Long): Action[AnyContent] = silhouette.SecuredAction.async {
     implicit request: Request[AnyContent] =>
       itemService.retrieveByID(itemID).flatMap {
@@ -46,11 +57,11 @@ class ItemController @Inject()(silhouette: Silhouette[JWTEnvironment],
   }
 
   /**
-   * Сохраняет данные объекта
-   *
-   * @param itemID ID объекта, который необходимо сохранить
-   * @return Результат выполнения операции
-   */
+    * Сохраняет данные объекта
+    *
+    * @param itemID ID объекта, который необходимо сохранить
+    * @return Результат выполнения операции
+    */
   def saveItem(itemID: Long): Action[AnyContent] = silhouette.SecuredAction(hasSignUpMethod[JWTEnvironment#A](CredentialsProvider.ID)).async { implicit request: SecuredRequest[JWTEnvironment, AnyContent] =>
 
     val currentUser = request.identity
@@ -70,11 +81,11 @@ class ItemController @Inject()(silhouette: Silhouette[JWTEnvironment],
   }
 
   /**
-   * Удаляет данные объекта
-   *
-   * @param itemID ID объекта, который необходимо удалить
-   * @return Результат выполнения операции
-   */
+    * Удаляет данные объекта
+    *
+    * @param itemID ID объекта, который необходимо удалить
+    * @return Результат выполнения операции
+    */
   def deleteItem(itemID: Long): Action[AnyContent] = silhouette.SecuredAction(hasSignUpMethod[JWTEnvironment#A](CredentialsProvider.ID)).async { implicit request: SecuredRequest[JWTEnvironment, AnyContent] =>
 
     val currentUser = request.identity

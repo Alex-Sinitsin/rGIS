@@ -1,0 +1,22 @@
+@import '~antd/dist/antd.css';
+
+.pageHeader {
+    background-color: #001529;
+    padding: 5px 10px;
+}
+
+.mainContent {
+    background-color: #fff;
+    padding: 10px;
+    height: 100%;
+}
+
+.loginButtonText,
+.logoutButtonText{
+    color: #fff;
+}
+
+.ant-page-header-heading-title {
+    color: #fff;
+}
+
