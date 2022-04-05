@@ -11,15 +11,12 @@ import './index.css';
 const store = configureStore();
 
 ReactDOM.render(
-    <React.StrictMode>
         <ConfigProvider locale={ruRU}>
             <Provider store={store}>
                 <BrowserRouter>
                     <App/>
                 </BrowserRouter>
             </Provider>
-        </ConfigProvider>
-
-    </React.StrictMode>,
+        </ConfigProvider>,
     document.getElementById('root')
 );

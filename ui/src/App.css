@@ -1,14 +1,9 @@
 @import '~antd/dist/antd.css';
 
-.pageHeader {
-    background-color: #001529;
-    padding: 5px 10px;
-}
-
 .mainContent {
     background-color: #fff;
     padding: 10px;
-    height: 100%;
+    height: calc(100vh - 75px);
 }
 
 .loginButtonText,
@@ -18,5 +13,20 @@
 
 .ant-page-header-heading-title {
     color: #fff;
+}
+
+.mainContent {
+    padding: 20px;
+}
+
+.logotype {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 0;
+}
+
+.logotype .logoText {
+    margin-left: 10px;
 }
 

@@ -1,0 +1,24 @@
+.loginPageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 85px);
+    width: 100%;
+}
+
+.loginForm {
+    width: 300px;
+}
+
+.loginForm .login-form-button {
+    display: block;
+    width: 100%;
+}
+
+.loginForm .login-form-item-icon {
+    padding-right: 5px;
+}
+
+.loginForm .login-form-title {
+    text-align: center;
+}
