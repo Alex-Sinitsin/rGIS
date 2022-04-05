@@ -8,7 +8,7 @@ const LOGOUT_USER = "LOGOUT_USER";
 const initialState = {
     user: null,
     loading: false,
-    error: null
+    error: ''
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -20,9 +20,10 @@ export const authReducer = (state = initialState, action) => {
             };
         case LOGIN_SUCCESS:
             return {
-              ...state,
-              loading: false,
-              user: action.payload,
+                ...state,
+                loading: false,
+                user: action.payload,
+                error: '',
             };
         case LOGIN_FAIL:
             return {
@@ -46,7 +47,7 @@ export const loginSuccess = (userInfo) => ({
 
 export const loginFail = (error) => ({
     type: LOGIN_FAIL,
-    error: error,
+    payload: error,
 });
 
 export const loginInitiate = (email, password) => dispatch => {
@@ -58,20 +59,23 @@ export const loginInitiate = (email, password) => dispatch => {
     }
 
     fetch('api/signIn', {
-        method: 'post',
-        headers: {
-            "Csrf-Token": Cookies.get('csrfCookie'),
-            "Content-type": "application/json"
-        },
-        body: JSON.stringify(loginData),
-    })
+            method: 'post',
+            headers: {
+                "Csrf-Token": Cookies.get('csrfCookie'),
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(loginData),
+        }
+    )
         .then(response => response.json())
-        .then((data) => {
-            const user = data.data
-            dispatch(loginSuccess(user));
+        .then((userData) => {
+            const user = userData.data
+            if(userData.status === "success") {
+                dispatch(loginSuccess(user));
+                localStorage.setItem('auth', JSON.stringify(user))
+            } else {
+                dispatch(loginFail(userData.message))
+            }
         })
-        .catch(error => {
-            console.log(error);
-            dispatch(loginFail(error.message))
-        });
+        .catch(error => console.error(error))
 }

@@ -1,18 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Form, Input, Button } from 'antd';
 import {connect} from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import {MailOutlined, LockOutlined, LoginOutlined} from '@ant-design/icons';
 import {loginInitiate} from "../../redux/modules/auth";
 
 import "./login.css";
 import Title from "antd/es/typography/Title";
+import {getItemFromLocalStorage} from "../../redux/utils";
 
-const Login = ({loginInitiate}) => {
+
+const Login = ({loginInitiate, auth}) => {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(getItemFromLocalStorage('auth')) navigate('/');
+    },[auth.user]);
 
     const onFinish = (values) => {
         loginInitiate(values.email, values.password);
-        console.log('Received values of form: ', values);
     };
 
     const validateMessages = {
@@ -31,6 +39,7 @@ const Login = ({loginInitiate}) => {
                 onFinish={onFinish}
             >
                 <Title className="login-form-title" level={3}>Авторизация</Title>
+                {auth.error && <p>{auth?.error}</p>}
                 <Form.Item
                     name="email"
                     rules={[{ type: "email", required: true }]}
@@ -59,6 +68,6 @@ const Login = ({loginInitiate}) => {
 };
 
 export default connect(
-    null,
+    ({ auth }) => ({ auth }),
     ({loginInitiate: loginInitiate})
 )(Login);
