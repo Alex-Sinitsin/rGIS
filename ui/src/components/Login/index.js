@@ -1,13 +1,17 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
+import {connect} from "react-redux";
+
 import {MailOutlined, LockOutlined, LoginOutlined} from '@ant-design/icons';
+import {loginInitiate} from "../../redux/modules/auth";
 
 import "./login.css";
 import Title from "antd/es/typography/Title";
 
-const Login = props => {
+const Login = ({loginInitiate}) => {
 
     const onFinish = (values) => {
+        loginInitiate(values.email, values.password);
         console.log('Received values of form: ', values);
     };
 
@@ -54,4 +58,7 @@ const Login = props => {
     );
 };
 
-export default Login;
+export default connect(
+    null,
+    ({loginInitiate: loginInitiate})
+)(Login);

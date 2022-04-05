@@ -1,5 +1,5 @@
-import auth from "./auth";
+import { authReducer } from "./auth";
 
 export const rootReducers = {
-    auth
+    auth: authReducer,
 };

@@ -3,7 +3,9 @@ import './App.css';
 
 import {
     Routes,
-    Route, Link,
+    Route,
+    Link,
+    useMatch
 } from "react-router-dom";
 
 import {Avatar, Button, Layout, Menu, Typography} from 'antd';
@@ -17,11 +19,14 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import Sider from "antd/es/layout/Sider";
 
+
 const {Header, Content} = Layout;
 const { Text } = Typography;
 
 function App() {
     const [collapsed, SetCollapsed] = useState(true);
+    const match = useMatch({ path: "/", end: true });
+
     return (
         <Layout>
             <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -29,11 +34,11 @@ function App() {
                     <Avatar className="logoImage" src="./assets/images/logo.png" />
                     {!collapsed && <Text className="logoText" strong style={{ color: '#fff', textTransform: 'uppercase', fontSize: '18px' }}>Сатурн ГИС</Text>}
                 </div>
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                    <Menu.Item key="1" icon={<HomeOutlined/>}>
+                <Menu theme="dark" mode="inline">
+                    <Menu.Item className={match?.pathname === "/" ? "ant-menu-item-selected" : ""} key="1" icon={<HomeOutlined/>}>
                         <Link to="/">Главная</Link>
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<UserOutlined/>}>
+                    <Menu.Item className={!match ? "ant-menu-item-selected" : ""} key="2" icon={<UserOutlined/>}>
                         <Link to="/login">Логин</Link>
                     </Menu.Item>
                 </Menu>
