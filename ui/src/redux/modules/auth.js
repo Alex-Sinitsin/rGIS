@@ -23,13 +23,20 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 user: action.payload,
-                error: '',
+                error: null,
             };
         case LOGIN_FAIL:
             return {
                 ...state,
                 loading: false,
                 error: action.payload
+            }
+        case LOGOUT_USER:
+            return {
+                ...state,
+                loading: false,
+                user: null,
+                error: null,
             }
         default:
             return state;
@@ -75,6 +82,23 @@ export const loginInitiate = (email, password) => dispatch => {
                 localStorage.setItem('auth', JSON.stringify(user))
             } else {
                 dispatch(loginFail(userData.message))
+            }
+        })
+        .catch(error => console.error(error))
+}
+
+export const logoutInitiate = (token) => dispatch => {
+    fetch('api/signOut', {
+            method: 'get',
+            headers: {
+                "Csrf-Token": Cookies.get('csrfCookie'),
+                'X-Auth-Token': token,
+            }
+        }
+    )
+        .then(response => {
+            if (response.ok) {
+                localStorage.clear();
             }
         })
         .catch(error => console.error(error))
