@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@2gis/mapgl@^1.25.0":
+  version "1.25.0"
+  resolved "https://registry.yarnpkg.com/@2gis/mapgl/-/mapgl-1.25.0.tgz#d53ba1639f98d9e538c9b69c532f92d02e71303b"
+  integrity sha512-ydn408CXJ531lVomKr3nMNbZdb2TEKNK+oHZ8OSKPV8LvZKl6j5sOzOEbC0/NpWHB9NrzGTcI30nUnAZt+OYyA==
+  dependencies:
+    "@types/geojson" "^7946.0.7"
+
 "@ampproject/remapping@^2.1.0":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.1.2.tgz#4edca94973ded9630d20101cd8559cedb8d8bd34"
@@ -1829,6 +1836,11 @@
     "@types/express-serve-static-core" "^4.17.18"
     "@types/qs" "*"
     "@types/serve-static" "*"
+
+"@types/geojson@^7946.0.7":
+  version "7946.0.8"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.8.tgz#30744afdb385e2945e22f3b033f897f76b1f12ca"
+  integrity sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
