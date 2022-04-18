@@ -5,11 +5,12 @@ import {
     Routes,
     Route,
     Link,
-    useMatch
+    useMatch,
 } from "react-router-dom";
 
 import {Avatar,Layout, Menu} from 'antd';
 import {
+    AppstoreAddOutlined,
     HomeOutlined,
 } from '@ant-design/icons';
 import {CustomHeader as Header, Home, Login, CreateEvent} from "./components"
@@ -24,8 +25,6 @@ function App() {
 
     const [collapsed, setCollapsed] = useState(true);
 
-    console.log(match?.pathname)
-
     return (
         <Layout>
             <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -39,8 +38,8 @@ function App() {
                                icon={<HomeOutlined/>}>
                         <Link to="/">Главная</Link>
                     </Menu.Item>
-                    <Menu.Item className={match?.pathname !== "/" ? "ant-menu-item-selected" : ""} key="2"
-                               icon={<HomeOutlined/>}>
+                    <Menu.Item className={match === null ? "ant-menu-item-selected" : ""} key="2"
+                               icon={<AppstoreAddOutlined />}>
                         <Link to="/event">Бронирование</Link>
                     </Menu.Item>
                 </Menu>

@@ -1,7 +1,7 @@
 import Home from "./Home";
 import Login from "./Login";
 import CustomHeader from "./CustomHeader";
-import MapGL from "./Map";
+import Map2GIS from "./Map";
 import CreateEvent from "./CreateEvent";
 
 export {
@@ -9,5 +9,5 @@ export {
     Login,
     CreateEvent,
     CustomHeader,
-    MapGL,
+    Map2GIS,
 }
