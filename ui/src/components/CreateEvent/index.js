@@ -28,7 +28,7 @@ const CreateEvent = () => {
             title: 'Что-то другое',
         },
     ];
-
+    //TODO: Добавить функцию для вывода содержимого пошагового действия
     return (
         <>
             <Steps current={current}>
