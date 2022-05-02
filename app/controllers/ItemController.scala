@@ -14,8 +14,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class ItemController @Inject()(ws: WSClient,
-                               silhouette: Silhouette[JWTEnvironment],
+class ItemController @Inject()(silhouette: Silhouette[JWTEnvironment],
                                controllerComponents: ControllerComponents,
                                itemService: ItemService,
                                hasSignUpMethod: HasSignUpMethod)
@@ -26,20 +25,9 @@ class ItemController @Inject()(ws: WSClient,
     *
     * @return
     */
-    //TODO: Запрос к API 2gis
   def listAll(): Action[AnyContent] = silhouette.UnsecuredAction.async {
     implicit request: Request[AnyContent] =>
-
-//      val request: WSRequest = ws.url("https://catalog.api.2gis.com/3.0/region/search")
-//        .addQueryStringParameters("q" -> "Екатеринбург", "key" -> "")
-//        .addHttpHeaders("Accept" -> "application/json")
-
-//      request.get().map(rsp => Ok(rsp.json))
-
-    //      itemService.retrieveAll.flatMap { items =>
-    //        Future.successful(Ok(Json.toJson(items)).withHeaders("X-Total-Count" -> items.size.toString))
-    //      }
-      Future.successful(Ok(""))
+        itemService.retrieveAll.map(data => Ok(Json.toJson(data)))
   }
 
   /**

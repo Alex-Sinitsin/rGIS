@@ -1,12 +1,14 @@
 package models.services
 
-import models.{Item, User}
 import models.daos.ItemDAO
+import models.{GisItem, Item, Point, User}
+import modules.MapAPIModule
 
 import javax.inject.Inject
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
-class ItemService @Inject()(itemDAO: ItemDAO)(implicit ex: ExecutionContext) {
+class ItemService @Inject()(itemDAO: ItemDAO, mapAPI: MapAPIModule)(implicit ex: ExecutionContext) {
 
   /**
    * Функция проверки роли "Администратор" пользователя
@@ -24,7 +26,26 @@ class ItemService @Inject()(itemDAO: ItemDAO)(implicit ex: ExecutionContext) {
    *
    * @return
    */
-  def retrieveAll: Future[Seq[Item]] = itemDAO.getAll
+
+    //TODO: Доделать сохранение данных в бд
+  def retrieveAll: Future[ArrayBuffer[GisItem]] = {
+    val itemList = ArrayBuffer.empty[GisItem]
+
+    val itemsInDB = itemDAO.getAll
+
+    lazy val restaurants = mapAPI.getCompaniesInformation("Рестораны");
+    lazy val businessCenters = mapAPI.getCompaniesInformation("Бизнес-центры");
+
+    itemsInDB.flatMap(itemSeq => {
+        if(itemSeq == Seq.empty) {
+          restaurants.flatMap(col => {
+            val items = col.json.result.get("result").result.get("items").as[Array[GisItem]]
+            items.flatMap(item => itemList += item)
+            Future.successful(itemList)
+          })
+        } else Future.successful(ArrayBuffer(GisItem(None, "", None, "", "", Point(0.0, 0.0), "")))
+    })
+  }
 
   /**
    * Извлекает данные объекта по его ID

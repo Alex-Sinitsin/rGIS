@@ -49,7 +49,7 @@ class ItemDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
    * @return Объект, который был добавлен
    */
   def add(item: Item): Future[Item] =
-    db.run(items += Item(item.id, item.name, item.address)).map(_ => item)
+    db.run(items += Item(item.id, item.name, item.address, item.lat, item.lon)).map(_ => item)
 
   /**
    * Обновляет данные объекта
