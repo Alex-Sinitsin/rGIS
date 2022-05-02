@@ -13,7 +13,9 @@ object ItemForm {
     mapping(
       "id" -> ignored(-1L),
       "name" -> nonEmptyText,
-      "address" -> nonEmptyText
+      "address" -> nonEmptyText,
+      "lat" -> ignored(0.0),
+      "lon" -> ignored(0.0)
     )(Item.apply)(Item.unapply)
   )
 }

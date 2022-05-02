@@ -77,9 +77,11 @@ DROP SCHEMA auth;
 CREATE SCHEMA app;
 
 CREATE TABLE app.items (
-  id     BIGSERIAL   NOT NULL PRIMARY KEY,
-  name   VARCHAR     NOT NULL,
-  address VARCHAR    NOT NULL
+  id      BIGSERIAL   NOT NULL PRIMARY KEY,
+  name    VARCHAR     NOT NULL,
+  address VARCHAR     NOT NULL,
+  lat     REAL        NOT NULL,
+  lon     REAL        NOT NULL
 );
 
 CREATE TABLE app.events (
@@ -103,7 +105,7 @@ CREATE TABLE app.event_members
 );
 
 # --- !Downs
+DROP TABLE app.event_members;
 DROP TABLE app.events;
 DROP TABLE app.items;
-DROP TABLE app.event_members;
 DROP SCHEMA app

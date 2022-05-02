@@ -92,7 +92,9 @@ trait TableDefinitions {
     def id = column[Long]("id", O.SqlType("SERIAL"), O.PrimaryKey, O.AutoInc)
     def name = column[String]("name")
     def address = column[String]("address")
-    def * = (id, name, address).<> ((Item.apply _).tupled, Item.unapply)
+    def lat = column[Double]("lat")
+    def lon = column[Double]("lon")
+    def * = (id, name, address, lat, lon).<> ((Item.apply _).tupled, Item.unapply)
   }
 
   class Members(tag: Tag) extends Table[EventMember](tag, Some("app"), "event_members") {
