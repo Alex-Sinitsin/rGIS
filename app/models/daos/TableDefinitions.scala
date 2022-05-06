@@ -89,12 +89,13 @@ trait TableDefinitions {
   }
 
   class Items(tag: Tag) extends Table[Item](tag, Some("app"), "items") {
-    def id = column[Long]("id", O.SqlType("SERIAL"), O.PrimaryKey, O.AutoInc)
+    def id = column[Long]("id", O.SqlType("SERIAL"), O.PrimaryKey)
     def name = column[String]("name")
     def address = column[String]("address")
     def lat = column[Double]("lat")
     def lon = column[Double]("lon")
-    def * = (id, name, address, lat, lon).<> ((Item.apply _).tupled, Item.unapply)
+    def rubric = column[String]("rubric")
+    def * = (id, name, address, lat, lon, rubric).<> ((Item.apply _).tupled, Item.unapply)
   }
 
   class Members(tag: Tag) extends Table[EventMember](tag, Some("app"), "event_members") {

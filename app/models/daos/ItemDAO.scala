@@ -1,14 +1,13 @@
 package models.daos
 
 import com.google.inject.Inject
-
 import play.api.db.slick.DatabaseConfigProvider
-
 import slick.jdbc.PostgresProfile.api._
 
 import scala.concurrent.{ExecutionContext, Future}
-
 import models.Item
+
+import scala.collection.mutable.ArrayBuffer
 
 class ItemDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends DatabaseDAO {
 
@@ -17,8 +16,8 @@ class ItemDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
    *
    * @return Список объектов
    */
-  def getAll: Future[Seq[Item]] = {
-    db.run(items.result)
+  def getAll: Future[List[Item]] = {
+    db.run(items.result.map(_.toList))
   }
 
   /**
@@ -45,11 +44,11 @@ class ItemDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
   /**
    * Добавление нового объекта
    *
-   * @param item Объект для добавления
-   * @return Объект, который был добавлен
+   * @param itemsArray Массив объектов для добавления
+   * @return Массив объектов, который был добавлен
    */
-  def add(item: Item): Future[Item] =
-    db.run(items += Item(item.id, item.name, item.address, item.lat, item.lon)).map(_ => item)
+  def add(itemsArray: ArrayBuffer[Item]): Future[List[Item]] =
+    db.run(items ++= itemsArray).map(_ => itemsArray.toList)
 
   /**
    * Обновляет данные объекта

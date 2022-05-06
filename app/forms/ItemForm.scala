@@ -15,7 +15,8 @@ object ItemForm {
       "name" -> nonEmptyText,
       "address" -> nonEmptyText,
       "lat" -> ignored(0.0),
-      "lon" -> ignored(0.0)
+      "lon" -> ignored(0.0),
+      "rubric" -> nonEmptyText()
     )(Item.apply)(Item.unapply)
   )
 }

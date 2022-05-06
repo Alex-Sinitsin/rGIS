@@ -24,8 +24,6 @@ DELETE      /api/events/:eventId                  controllers.EventController.de
 # Объекты
 GET        /api/items                             controllers.ItemController.listAll()
 GET        /api/items/:itemId                     controllers.ItemController.getItemByID(itemId: Long)
-POST       /api/items                             controllers.ItemController.saveItem(itemId: Long = -1)
-PUT        /api/items/:itemId                     controllers.ItemController.saveItem(itemId: Long)
 DELETE     /api/items/:itemId                     controllers.ItemController.deleteItem(itemId: Long)
 
 # Map static resources from the /public folder to the /assets URL path

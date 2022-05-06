@@ -81,7 +81,8 @@ CREATE TABLE app.items (
   name    VARCHAR     NOT NULL,
   address VARCHAR     NOT NULL,
   lat     REAL        NOT NULL,
-  lon     REAL        NOT NULL
+  lon     REAL        NOT NULL,
+  rubric  VARCHAR     NOT NULL
 );
 
 CREATE TABLE app.events (

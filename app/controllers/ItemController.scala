@@ -6,7 +6,6 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import forms.ItemForm
 import models.services._
 import play.api.libs.json.Json
-import play.api.libs.ws._
 import play.api.mvc._
 import utils.auth.{HasSignUpMethod, JWTEnvironment}
 
@@ -27,7 +26,7 @@ class ItemController @Inject()(silhouette: Silhouette[JWTEnvironment],
     */
   def listAll(): Action[AnyContent] = silhouette.UnsecuredAction.async {
     implicit request: Request[AnyContent] =>
-        itemService.retrieveAll.map(data => Ok(Json.toJson(data)))
+        itemService.retrieveAll.map(items => Ok(Json.toJson(items)))
   }
 
   /**
@@ -42,30 +41,6 @@ class ItemController @Inject()(silhouette: Silhouette[JWTEnvironment],
         case Some(item) => Future.successful(Ok(Json.toJson(item)))
         case None => Future.successful(NotFound(Json.toJson(Json.obj("status" -> "error", "code" -> NOT_FOUND, "message" -> "Объект не найден!"))))
       }
-  }
-
-  /**
-    * Сохраняет данные объекта
-    *
-    * @param itemID ID объекта, который необходимо сохранить
-    * @return Результат выполнения операции
-    */
-  def saveItem(itemID: Long): Action[AnyContent] = silhouette.SecuredAction(hasSignUpMethod[JWTEnvironment#A](CredentialsProvider.ID)).async { implicit request: SecuredRequest[JWTEnvironment, AnyContent] =>
-
-    val currentUser = request.identity
-
-    ItemForm.form.bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(Json.toJson(formWithErrors.errors.toString))),
-      data => {
-        itemService.createOrUpdate(itemID, data, currentUser).flatMap {
-          case ItemCreated(item) => Future.successful(Created(Json.toJson(Json.obj("status" -> "success", "message" -> "Объект успешно добавлен!", "data" -> item))))
-          case ItemUpdated(item) => Future.successful(Ok(Json.toJson(Json.obj("status" -> "success", "message" -> "Объект успешно обновлен!", "data" -> item.copy(id = itemID)))))
-          case ItemAlreadyExist => Future.successful(Conflict(Json.toJson(Json.obj("status" -> "error", "code" -> CONFLICT, "message" -> "Объект с таким именем уже существует!"))))
-          case OperationForbidden => Future.successful(Forbidden(Json.toJson(Json.obj("status" -> "error", "code" -> FORBIDDEN, "message" -> "Недостаточно прав для выполнения операции!"))))
-          case _ => Future.successful(BadRequest(Json.toJson(Json.obj("status" -> "error", "code" -> INTERNAL_SERVER_ERROR, "message" -> "Произошла ошибка при сохранении объекта!"))))
-        }
-      }
-    )
   }
 
   /**
