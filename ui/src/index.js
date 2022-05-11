@@ -8,6 +8,7 @@ import {Provider} from 'react-redux';
 import { YMaps } from 'react-yandex-maps';
 import App from './App';
 import './index.css';
+import 'moment/locale/ru';
 
 const store = configureStore();
 

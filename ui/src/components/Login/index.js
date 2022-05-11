@@ -17,7 +17,7 @@ const Login = ({loginInitiate, auth}) => {
 
     useEffect(() => {
         if(getItemFromLocalStorage('auth')) navigate('/');
-    },[auth.user]);
+    },[auth.user, navigate]);
 
     const onFinish = (values) => {
         loginInitiate(values.email, values.password);

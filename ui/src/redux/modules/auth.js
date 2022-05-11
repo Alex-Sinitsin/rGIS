@@ -4,6 +4,7 @@ const LOGIN_START = "LOGIN_START";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGIN_FAIL = "LOGIN_FAIL";
 const LOGOUT_USER = "LOGOUT_USER";
+const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
 const initialState = {
     user: null,
@@ -11,8 +12,8 @@ const initialState = {
     error: ''
 };
 
-export const authReducer = (state = initialState, action) => {
-    switch (action.type) {
+export const authReducer = (state = initialState, {type, payload}) => {
+    switch (type) {
         case LOGIN_START:
             return {
                 ...state,
@@ -22,14 +23,14 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                user: action.payload,
+                user: payload,
                 error: null,
             };
         case LOGIN_FAIL:
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                error: payload
             }
         case LOGOUT_USER:
             return {
@@ -55,6 +56,10 @@ export const loginSuccess = (userInfo) => ({
 export const loginFail = (error) => ({
     type: LOGIN_FAIL,
     payload: error,
+});
+
+export const LogOutSuccess = () => ({
+    type: LOGOUT_SUCCESS,
 });
 
 export const loginInitiate = (email, password) => dispatch => {
@@ -99,6 +104,7 @@ export const logoutInitiate = (token) => dispatch => {
         .then(response => {
             if (response.ok) {
                 localStorage.clear();
+                dispatch(LogOutSuccess);
             }
         })
         .catch(error => console.error(error))

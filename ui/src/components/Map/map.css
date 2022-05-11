@@ -13,3 +13,9 @@
 .yandexMap .ymaps-2-1-79-map-copyrights-promo {
     display: none;
 }
+
+.item-rubric {
+    display: block;
+    font-weight: normal;
+    font-size: 11px;
+}

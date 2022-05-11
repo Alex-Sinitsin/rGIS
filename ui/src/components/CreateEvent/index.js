@@ -1,8 +1,9 @@
 import React from 'react';
-import { Steps, Button, message } from 'antd';
+import {Steps, Button, message, DatePicker} from 'antd';
 
 import { MapYandex } from "../index";
 import "./createEvent.css";
+import moment from "moment";
 
 const { Step } = Steps;
 
@@ -25,7 +26,7 @@ const CreateEvent = () => {
             title: 'Выберите дату и время',
         },
         {
-            title: 'Что-то другое',
+            title: 'Добавьте участников',
         },
     ];
     return (
@@ -38,6 +39,12 @@ const CreateEvent = () => {
             <div className="steps-content">
                 {current === 0 ?
                     (<MapYandex />)
+                : (<></>)}
+                {current === 1 ?
+                    (<DatePicker
+                        format="DD.MM.YYYY HH:mm"
+                        showTime={{ defaultValue: moment() }}
+                    />)
                 : (<></>)}
             </div>
             <div className="steps-action">

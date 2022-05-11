@@ -24,7 +24,7 @@ class ItemController @Inject()(silhouette: Silhouette[JWTEnvironment],
     *
     * @return
     */
-  def listAll(): Action[AnyContent] = silhouette.UnsecuredAction.async {
+  def listAll(): Action[AnyContent] = silhouette.SecuredAction.async {
     implicit request: Request[AnyContent] =>
         itemService.retrieveAll.map(items => Ok(Json.toJson(items)))
   }
