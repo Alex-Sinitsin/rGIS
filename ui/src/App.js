@@ -10,47 +10,62 @@ import {
 
 import {Avatar,Layout, Menu} from 'antd';
 import {
-    AppstoreAddOutlined,
-    HomeOutlined,
+    AppstoreAddOutlined, DashboardOutlined,
+    HomeOutlined, UserSwitchOutlined,
 } from '@ant-design/icons';
 import {CustomHeader as Header, Home, Login, CreateEvent} from "./components"
 import {connect} from "react-redux";
+import Users from "./components/AdminPanel/Users";
 
 
 const {Sider, Content} = Layout;
 
 
 function App() {
-    const match = useMatch({path: "/", end: true});
-
-    const [collapsed, setCollapsed] = useState(true);
+    const [user, setUser] = useState(null);
+    const pathnameLocation = window.location.pathname;
+    const match = useMatch({path: pathnameLocation, end: true});
 
     return (
         <Layout>
-            <Sider trigger={null} collapsible collapsed={collapsed}>
+            <Sider trigger={null} collapsible collapsed={true}>
                 <div className="logotype">
                     <Link to="/">
-                        <Avatar className="logoImage" src="./assets/images/logo.png"/>
+                        <Avatar className="logoImage" src="/assets/images/logo.png"/>
                     </Link>
                 </div>
                 <Menu theme="dark" mode="inline">
-                    <Menu.Item className={match?.pathname === "/" ? "ant-menu-item-selected" : ""} key="1"
+                    <Menu.Item className={match.pathname === '/' ? "ant-menu-item-selected" : ""} key="1"
                                icon={<HomeOutlined/>}>
                         <Link to="/">Главная</Link>
                     </Menu.Item>
-                    <Menu.Item className={match === null ? "ant-menu-item-selected" : ""} key="2"
+                    <Menu.Item className={match.pathname === '/booking' ? "ant-menu-item-selected" : ""} key="2"
                                icon={<AppstoreAddOutlined />}>
-                        <Link to="/event">Бронирование</Link>
+                        <Link to="/booking">Бронирование</Link>
                     </Menu.Item>
+                    {user?.userInfo?.role === "Admin" &&
+                        <Menu.SubMenu title='Панель управления'
+                                      className={
+                                        match.pathname === '/dashboard' ||
+                                        match.pathname === '/dashboard/users'
+                                            ? "ant-menu-item-selected" : ""
+                                      }
+                                      key='3' mode={'inline'} icon={<DashboardOutlined />}>
+                            <Menu.Item key="3.1">
+                                <Link to="/dashboard/users"><UserSwitchOutlined style={{marginRight: '10px'}} />Пользователи</Link>
+                            </Menu.Item>
+                        </Menu.SubMenu>
+                    }
                 </Menu>
             </Sider>
             <Layout className="layout" style={{minHeight: '100vh'}}>
-                <Header setCollapsed={setCollapsed} collapsed={collapsed} />
+                <Header user={user} setUser={setUser}/>
                 <Content className="mainContent">
                     <Routes>
                         <Route exact path="/" element={<Home/>}/>
                         <Route path="/login" element={<Login/>}/>
-                        <Route path="/event" element={<CreateEvent/>}/>
+                        <Route path="/booking" element={<CreateEvent/>}/>
+                        <Route path="/dashboard/users" element={<Users />}/>
                     </Routes>
                 </Content>
             </Layout>

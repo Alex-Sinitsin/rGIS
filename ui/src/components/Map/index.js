@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Clusterer, Map, Placemark} from "react-yandex-maps";
 import {connect} from "react-redux";
 
 import "./map.css";
-import {getItems} from "../../redux/modules/items";
+import { getItems as getItemsAction} from "../../redux/modules/items";
 
-const MapYandex = ({items, getItems}) => {
-    const [selectedItem, setSelectedItem] = useState(null)
+const MapYandex = ({items, getItems, setSelectedItem}) => {
 
     useEffect(() => {
         getItems();
@@ -70,5 +69,5 @@ const MapYandex = ({items, getItems}) => {
 
 export default connect(
     ({items}) => ({items: items.items}),
-    ({getItems: getItems})
+    ({getItems: getItemsAction})
 )(MapYandex);

@@ -1,0 +1,37 @@
+.headerRow {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.headerUserProfile .userProfilePopover {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 15px;
+    height: 64px;
+    cursor: pointer;
+}
+
+.headerUserProfile .avatar {
+    background-color: #87d068;
+    margin-right: 15px;
+}
+
+.headerUserProfile .userInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: normal;
+}
+
+.headerUserProfile .userInfo .name {
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.headerUserProfile .userInfo .position {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+}

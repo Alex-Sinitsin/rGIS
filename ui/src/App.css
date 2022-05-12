@@ -30,39 +30,3 @@
     margin-left: 10px;
 }
 
-.headerRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.headerUserProfile {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 15px;
-}
-
-.headerUserProfile .avatar {
-    background-color: #87d068;
-    margin-right: 15px;
-}
-
-.headerUserProfile .userInfo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    line-height: normal;
-}
-
-.headerUserProfile .userInfo .name {
-    color: #fff;
-    font-size: 17px;
-    font-weight: bold;
-}
-
-.headerUserProfile .userInfo .position {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 13px;
-}
-
