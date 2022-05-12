@@ -3,7 +3,6 @@ package models.daos
 import com.google.inject.Inject
 import models.Event
 import play.api.db.slick.DatabaseConfigProvider
-import play.api.libs.json.Json
 import slick.jdbc.PostgresProfile.api._
 
 import java.sql.Timestamp
