@@ -10,7 +10,6 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import utils.auth._
 
-import java.util.UUID
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,14 +58,11 @@ class EventController @Inject()(silhouette: Silhouette[JWTEnvironment],
    * @return
    */
   def createEvent(): Action[AnyContent] = silhouette.SecuredAction.async { implicit request: Request[AnyContent] =>
-
     EventForm.form.bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(Json.toJson(formWithErrors.errors.toString))),
       data => {
-        val members: List[UUID] = data.members.get.map(UUID.fromString)
-
-        eventService.saveEvent(data, members).flatMap {
-          case EventCreated(_) => Future.successful(Created(Json.toJson(Json.obj("status" -> "success", "message" -> "Событие успешно добавлено!"))))
+        eventService.saveEvent(data).flatMap {
+          case EventCreated(event) => Future.successful(Created(Json.toJson(Json.obj("status" -> "success", "message" -> "Событие успешно добавлено!", "payload" -> event))))
           case InvalidEndDate => Future.successful(BadRequest(Json.toJson(Json.obj("status" -> "error", "message" -> "Событие не может заканчиваться в прошлом!"))))
           case DateTimeEqualException => Future.successful(BadRequest(Json.toJson(Json.obj("status" -> "error", "message" -> "Событие не может начинаться и заканчиваться в одно и то же время!"))))
           case EventAlreadyExists => Future.successful(Conflict(Json.toJson(Json.obj("status" -> "error", "code" -> CONFLICT, "message" -> "На указанное время запланировано другое событие!"))))
@@ -89,10 +85,8 @@ class EventController @Inject()(silhouette: Silhouette[JWTEnvironment],
       EventForm.form.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(Json.toJson(formWithErrors.errors.toString))),
         data => {
-          val members: List[UUID] = data.members.get.map(UUID.fromString)
-
-          eventService.updateEvent(eventID, data, members, currentUser).flatMap {
-            case EventUpdated(_) => Future.successful(Ok(Json.toJson(Json.obj("status" -> "success", "message" -> "Событие успешно обновлено!"))))
+          eventService.updateEvent(eventID, data, currentUser).flatMap {
+            case EventUpdated(event) => Future.successful(Ok(Json.toJson(Json.obj("status" -> "success", "message" -> "Событие успешно обновлено!", "payload" -> event))))
             case EventNotFound => Future.successful(NotFound(Json.toJson(Json.obj("status" -> "error", "code" -> NOT_FOUND, "message" -> "Событие не найдено!"))))
             case InvalidEndDate => Future.successful(BadRequest(Json.toJson(Json.obj("status" -> "error", "message" -> "Событие не может заканчиваться в прошлом!"))))
             case DateTimeEqualException => Future.successful(BadRequest(Json.toJson(Json.obj("status" -> "error", "message" -> "Событие не может начинаться и заканчиваться в одно и то же время!"))))
@@ -118,7 +112,7 @@ class EventController @Inject()(silhouette: Silhouette[JWTEnvironment],
       val currentUser: User = request.identity
 
       eventService.deleteEvent(eventID, currentUser).flatMap {
-        case EventDeleted => Future.successful(Ok(Json.toJson(Json.obj("status" -> "success", "message" -> "Событие успешно удалено!"))))
+        case EventDeleted(eventID) => Future.successful(Ok(Json.toJson(Json.obj("status" -> "success", "message" -> "Событие успешно удалено!", "payload" -> eventID))))
         case EventCreatedByAnotherUser(action) =>
           if (action == "delete") Future.successful(BadRequest(Json.toJson(Json.obj("status" -> "error", "message" -> "Событие создано другим пользователем и недоступно для удаления!"))))
           else Future.successful(Ok)

@@ -99,7 +99,7 @@ trait TableDefinitions {
   }
 
   class Members(tag: Tag) extends Table[EventMember](tag, Some("app"), "event_members") {
-    def userId = column[UUID]("user_id")
+    def userId = column[UUID]("mb_user_id")
     def eventId = column[Long]("event_id")
     def * = (userId, eventId).<> ((EventMember.apply _).tupled, EventMember.unapply)
   }

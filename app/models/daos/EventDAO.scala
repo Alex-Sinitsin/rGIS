@@ -1,7 +1,7 @@
 package models.daos
 
 import com.google.inject.Inject
-import models.Event
+import models.{Event, EventMember}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.PostgresProfile.api._
 
@@ -9,15 +9,15 @@ import java.sql.Timestamp
 import java.time.LocalDateTime
 import scala.concurrent.{ExecutionContext, Future}
 
-class EventDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends DatabaseDAO {
+class EventDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends DatabaseDAO {
 
   /**
-   * Извлекает событие по дате начала и дате окончания
-   *
-   * @param startDateTime Дата и время начала события
-   * @param endDateTime Дата и время окончанния события
-   * @return
-   */
+    * Извлекает событие по дате начала и дате окончания
+    *
+    * @param startDateTime Дата и время начала события
+    * @param endDateTime   Дата и время окончанния события
+    * @return
+    */
 
   def getByDateTime(startDateTime: LocalDateTime, endDateTime: LocalDateTime): Future[Option[Event]] = {
     val startTimestamp = Timestamp.valueOf(startDateTime)
@@ -32,53 +32,77 @@ class EventDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider
   }
 
   /**
-   * Извлекает событие по его ID
-   *
-   * @param eventID ID события
-   * @return
-   */
+    * Извлекает событие по его ID
+    *
+    * @param eventID ID события
+    * @return
+    */
   def getByID(eventID: Long): Future[Option[Event]] = {
     db.run(events.filter(_.id === eventID).result.headOption)
   }
 
   /**
-   * Получение всех событий
-   *
-   * @return Список всех событий
-   */
+    * Получение всех событий
+    *
+    * @return Список всех событий
+    */
   def getAll: Future[Seq[Event]] = {
     db.run(events.result)
   }
 
-  /**
-   * Добавление нового события
-   *
-   * @param event Событие для добавления
-   * @return
-   */
-  def add(event: Event): Future[Event] = {
-    db.run(events +=
-        Event(event.id, event.title, event.startDateTime, event.endDateTime, event.orgUserId, event.itemId, event.description))
-      .map(_ => event)
+  def getEventMembers(eventID: Long): Future[Seq[EventMember]] = {
+    db.run(members.filter(_.eventId === eventID).result)
   }
 
   /**
-   * Обновляет данные события
-   *
-   * @param event Объект для обновления
-   * @return
-   */
+    * Добавление нового события
+    *
+    * @param event Событие для добавления
+    * @return
+    */
+  def add(event: Event): Future[Event] = {
+    db.run((events returning events.map(_.id)
+                  into ((event, id) => event.copy(id = id))
+      ) += Event(event.id, event.title, event.startDateTime, event.endDateTime, event.orgUserId, event.itemId, event.description))
+  }
+
+  /**
+    * Сохраняет id пользователей-участников события
+    *
+    * @param membersList - Массив id пользователей
+    * @return Количество добавленных записей
+    */
+  def addEventMembers(membersList: List[EventMember]): Future[List[EventMember]] = {
+    db.run(members ++= membersList).map(_ => membersList)
+  }
+
+  /**
+    * Удаление участников события
+    *
+    * @param eventID - id события
+    * @return id удаленного события
+    */
+  def deleteEventMembers(eventID: Long): Future[Long] = {
+    db.run(members.filter(_.eventId === eventID).delete).map(_ => eventID)
+  }
+
+  /**
+    * Обновляет данные события
+    *
+    * @param event Объект для обновления
+    * @return
+    */
   def update(event: Event): Future[Event] =
     db.run(events.filter(_.id === event.id)
       .map(evt => (evt.title, evt.startDateTime, evt.endDateTime, evt.orgUserId, evt.itemId, evt.description))
       .update((event.title, event.startDateTime, event.endDateTime, event.orgUserId, event.itemId, event.description)).map(_ => event))
 
   /**
-   * Удаляет данные события
-   *
-   * @param eventID ID события
-   * @return
-   */
-  def delete(eventID: Long): Future[Boolean] =
-    db.run(events.filter(_.id === eventID).delete).map(_ > 0)
+    * Удаляет данные события
+    *
+    * @param eventID ID события
+    * @return
+    */
+  def delete(eventID: Long): Future[Long] =
+    db.run(events.filter(_.id === eventID).delete).map(_ => eventID)
 }

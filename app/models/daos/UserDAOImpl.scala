@@ -64,8 +64,8 @@ class UserDAOImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
    * @param userIDs ID пользователей, которых необходимо найти
    * @return Найденные пользователи
    */
-  override def findUsersByID(userIDs: Seq[UUID]): Future[Seq[User]] =
-    db.run(users.filter(_.id inSetBind userIDs).result).map(_.map {usrs => DBUser.toUser(usrs)})
+  override def findUsersByID(userIDs: List[UUID]): Future[List[User]] =
+    db.run(users.filter(_.id inSetBind userIDs).result).map(_.map {usrs => DBUser.toUser(usrs)}.toList)
 
   /**
    * Извлекает список всех пользователей
