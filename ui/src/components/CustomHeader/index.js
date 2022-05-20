@@ -23,7 +23,7 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
     const logoutUser = () => {
         logoutInitiate(user?.accessToken);
         setUser(null);
-        navigate('/login');
+        navigate("/login");
     }
 
     const content = () => {
@@ -40,8 +40,7 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
             localStorage.removeItem("auth");
             setUser(null);
             setIsTokenExp(false);
-        } else {
-        }
+        } else {}
     }
 
     useEffect(() => {

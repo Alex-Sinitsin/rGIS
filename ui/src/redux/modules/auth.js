@@ -103,7 +103,7 @@ export const logoutInitiate = (token) => dispatch => {
     )
         .then(response => {
             if (response.ok) {
-                localStorage.clear();
+                localStorage.removeItem("auth");
                 dispatch(LogOutSuccess);
             }
         })

@@ -8,16 +8,15 @@ import {loginInitiate} from "../../redux/modules/auth";
 
 import "./login.css";
 import Title from "antd/es/typography/Title";
-import {getItemFromLocalStorage} from "../../redux/utils";
 
 
-const Login = ({loginInitiate, auth}) => {
+const Login = ({loginInitiate, auth, user}) => {
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(getItemFromLocalStorage('auth')) navigate('/');
-    },[auth.user, navigate]);
+        if(user) navigate('/');
+    },[auth.user, navigate, user]);
 
     const onFinish = (values) => {
         loginInitiate(values.email, values.password);

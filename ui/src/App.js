@@ -72,7 +72,7 @@ function App() {
                 <Content className="mainContent">
                     <Routes>
                         <Route exact path="/" element={<Home/>}/>
-                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/login" element={<Login user={user}/>}/>
                         <Route path="/booking" element={<CreateEvent/>}/>
                         <Route path="/dashboard/users" element={<Users/>}/>
                     </Routes>
