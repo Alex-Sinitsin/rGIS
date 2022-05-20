@@ -1,8 +1,6 @@
 import React from 'react';
 import {Button, Col, DatePicker, Form, Input, Row} from "antd";
-import locale from 'antd/es/date-picker/locale/ru_RU'
 import moment from "moment";
-import 'moment/locale/ru';
 import "./chooseEventData.css";
 import TextArea from "antd/es/input/TextArea";
 
@@ -26,6 +24,7 @@ const ChooseEventData = ({onFormFinish}) => {
                     <Form.Item
                         name="startDateTime"
                         label="Дата и время начала события"
+                        initialValue={moment().locale("ru").format('YYYY-MM-DD HH:mm')}
                         rules={[
                             {
                                 required: true,
@@ -40,6 +39,7 @@ const ChooseEventData = ({onFormFinish}) => {
                     <Form.Item
                         name="endDateTime"
                         label="Дата и время конца события"
+                        initialValue={moment().locale("ru").format('YYYY-MM-DD HH:mm')}
                         rules={[
                             {
                                 required: true,
@@ -47,7 +47,7 @@ const ChooseEventData = ({onFormFinish}) => {
                             },
                         ]}
                     >
-                        <DatePicker locale={locale} format={'DD.MM.YYYY HH:mm'} initialValue={moment().locale("ru").format('YYYY-MM-DD HH:mm')} showTime style={{width: '100%'}}/>
+                        <DatePicker format={'DD.MM.YYYY HH:mm'} showTime style={{width: '100%'}}/>
                     </Form.Item>
                 </Col>
             </Row>

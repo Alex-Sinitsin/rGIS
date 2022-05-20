@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
-import {Avatar, Button, Col, Layout, Popover, Row, Typography} from "antd";
+import {Avatar, Button, Col, Layout, Popover, Row, Typography, message} from "antd";
 import {
     CaretDownOutlined,
     DashboardOutlined,
-    LoginOutlined, LogoutOutlined,
+    LoginOutlined,
+    LogoutOutlined,
     UserOutlined
 } from "@ant-design/icons";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {connect} from "react-redux";
 import {logoutInitiate} from "../../redux/modules/auth";
 import {getItemFromLocalStorage} from "../../redux/utils";
@@ -16,10 +17,13 @@ import './customHeader.css';
 const { Header } = Layout;
 const { Text } = Typography;
 
-const CustomHeader = ({ logoutInitiate, auth, user, setUser }) => {
+const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenExp, setIsTokenExp }) => {
+    const navigate = useNavigate();
+
     const logoutUser = () => {
         logoutInitiate(user?.accessToken);
         setUser(null);
+        navigate('/login');
     }
 
     const content = () => {
@@ -30,6 +34,35 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser }) => {
           </div>
       )
     }
+
+    const clearStorage = (isTokenExp) => {
+        if (isTokenExp) {
+            localStorage.removeItem("auth");
+            setUser(null);
+            setIsTokenExp(false);
+        } else {
+        }
+    }
+
+    useEffect(() => {
+        message.config({
+            top: 70
+        });
+
+        clearStorage(isTokenExp);
+        user && checkJWT(user.accessToken);
+
+        const checkTokenDateInterval = setInterval(() => {
+            clearStorage(isTokenExp);
+            checkJWT(user.accessToken);
+            message.info('Ваша сессия закнчилась, повторите вход в приложение', 10);
+            if (isTokenExp) navigate('/login');
+        }, 10800000)
+
+        return () => {
+            clearInterval(checkTokenDateInterval);
+        }
+    }, [auth.user, isTokenExp, checkJWT])
 
     useEffect(() => {
         const user = getItemFromLocalStorage('auth');
