@@ -37,36 +37,38 @@ function App() {
 
     return (
         <Layout>
-            <Sider trigger={null} collapsible collapsed={true}>
-                <div className="logotype">
-                    <Link to="/">
-                        <Avatar className="logoImage" src="/assets/images/logo.png"/>
-                    </Link>
-                </div>
-                <Menu theme="dark" mode="inline">
-                    <Menu.Item className={match.pathname === '/' ? "ant-menu-item-selected" : ""} key="1"
-                               icon={<HomeOutlined/>}>
-                        <Link to="/">Главная</Link>
-                    </Menu.Item>
-                    <Menu.Item className={match.pathname === '/booking' ? "ant-menu-item-selected" : ""} key="2"
-                               icon={<AppstoreAddOutlined/>}>
-                        <Link to="/booking">Бронирование</Link>
-                    </Menu.Item>
-                    {user?.userInfo?.role === "Admin" &&
-                        <Menu.SubMenu title='Панель управления'
-                                      className={
-                                          match.pathname === '/dashboard' ||
-                                          match.pathname === '/dashboard/users'
-                                              ? "ant-menu-item-selected" : ""
-                                      }
-                                      key='3' mode={'inline'} icon={<DashboardOutlined/>}>
-                            <Menu.Item key="3.1">
-                                <Link to="/dashboard/users"><UserSwitchOutlined style={{marginRight: '10px'}}/>Пользователи</Link>
-                            </Menu.Item>
-                        </Menu.SubMenu>
-                    }
-                </Menu>
-            </Sider>
+            {user &&
+                <Sider trigger={null} collapsible collapsed={true}>
+                    <div className="logotype">
+                        <Link to="/">
+                            <Avatar className="logoImage" src="/assets/images/logo.png"/>
+                        </Link>
+                    </div>
+                    <Menu theme="dark" mode="inline">
+                        <Menu.Item className={match.pathname === '/' ? "ant-menu-item-selected" : ""} key="1"
+                                   icon={<HomeOutlined/>}>
+                            <Link to="/">Главная</Link>
+                        </Menu.Item>
+                        <Menu.Item className={match.pathname === '/booking' ? "ant-menu-item-selected" : ""} key="2"
+                                   icon={<AppstoreAddOutlined/>}>
+                            <Link to="/booking">Бронирование</Link>
+                        </Menu.Item>
+                        {user?.userInfo?.role === "Admin" &&
+                            <Menu.SubMenu title='Панель управления'
+                                          className={
+                                              match.pathname === '/dashboard' ||
+                                              match.pathname === '/dashboard/users'
+                                                  ? "ant-menu-item-selected" : ""
+                                          }
+                                          key='3' mode={'inline'} icon={<DashboardOutlined/>}>
+                                <Menu.Item key="3.1">
+                                    <Link to="/dashboard/users"><UserSwitchOutlined style={{marginRight: '10px'}}/>Пользователи</Link>
+                                </Menu.Item>
+                            </Menu.SubMenu>
+                        }
+                    </Menu>
+                </Sider>
+            }
             <Layout className="layout" style={{minHeight: '100vh'}}>
                 <Header user={user} setUser={setUser} isTokenExp={isTokenExpired} checkJWT={checkJwtTokenDate}/>
                 <Content className="mainContent">

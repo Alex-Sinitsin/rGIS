@@ -3,7 +3,6 @@ import {Avatar, Button, Col, Layout, Popover, Row, Typography, message} from "an
 import {
     CaretDownOutlined,
     DashboardOutlined,
-    LoginOutlined,
     LogoutOutlined,
     UserOutlined
 } from "@ant-design/icons";
@@ -70,6 +69,7 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
 
     return (
         <Header className="header" style={{padding: 0}}>
+            {!user ? <Avatar className="logoImage" src="/assets/images/logo.png" style={{marginLeft: '15px'}}/> : null}
             <Row className="headerRow">
                 <Col className="headerUserProfile">
                     {user ? (
@@ -83,7 +83,7 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
                                 <CaretDownOutlined style={{color: '#fff', marginLeft: '10px'}}/>
                             </Popover>
                         </>
-                    ) : (<Link to="/login" style={{marginRight: '15px'}}><Button type="primary"><LoginOutlined/> Войти</Button></Link>)}
+                    ) : null}
                 </Col>
             </Row>
         </Header>
