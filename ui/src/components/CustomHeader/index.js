@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Avatar, Button, Col, Layout, Popover, Row, Typography, message} from "antd";
 import {
     CaretDownOutlined,
-    DashboardOutlined,
+    DashboardOutlined, LoginOutlined,
     LogoutOutlined,
     UserOutlined
 } from "@ant-design/icons";
@@ -51,12 +51,11 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
         user && checkJWT(user.accessToken);
 
         const checkTokenDateInterval = setInterval(() => {
-            clearStorage(isTokenExp);
             checkJWT(user.accessToken);
+            clearStorage(isTokenExp);
             message.info('Ваша сессия закнчилась, повторите вход в приложение', 10);
-            if (isTokenExp) navigate('/login');
+            navigate('/login');
         }, 10800000)
-
         return () => {
             clearInterval(checkTokenDateInterval);
         }
@@ -69,8 +68,8 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
 
     return (
         <Header className="header" style={{padding: 0}}>
-            {!user ? <Avatar className="logoImage" src="/assets/images/logo.png" style={{marginLeft: '15px'}}/> : null}
             <Row className="headerRow">
+                <Col xl={{span: 22}} lg={{span: 21}} md={{span: 20}} sm={{span: 19}} span={16} className='headerLogo'>{!user ? <Avatar className="logoImage" src="/assets/images/logo.png" style={{marginLeft: '15px'}}/> : null}</Col>
                 <Col className="headerUserProfile">
                     {user ? (
                         <>
@@ -83,7 +82,7 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
                                 <CaretDownOutlined style={{color: '#fff', marginLeft: '10px'}}/>
                             </Popover>
                         </>
-                    ) : null}
+                    ) : (<Link to="/login" style={{marginRight: '15px'}}><Button type="primary"><LoginOutlined/> Войти</Button></Link>)}
                 </Col>
             </Row>
         </Header>

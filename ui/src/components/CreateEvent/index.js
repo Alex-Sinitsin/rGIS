@@ -4,11 +4,13 @@ import {Steps, Button, message} from 'antd';
 import {MapYandex} from "../index";
 import ChooseEventData from "../ChooseEventData";
 import "./createEvent.css";
+import ChooseMembers from "../ChooseMembers";
 
 const {Step} = Steps;
 
-const CreateEvent = () => {
-    const [current, setCurrent] = React.useState(0);
+const CreateEvent = ({user}) => {
+    const [current, setCurrent] = React.useState(2);
+    const [selItems, setSelItems] = React.useState([]);
     const [eventForm, setEventForm] = React.useState({newEvent: {}, members: []});
 
     const next = () => {
@@ -51,6 +53,10 @@ const CreateEvent = () => {
         }));
     }
 
+    const onMembersChange = (membersIds) => {
+        console.log(membersIds);
+    }
+
     const steps = [
         {
             title: 'Выберите объект для бронирования',
@@ -75,7 +81,7 @@ const CreateEvent = () => {
                     : (<></>)}
                 {current === 1 ?
                     (<ChooseEventData onFormFinish={onEventFormFinish}/>)
-                    : (<></>)}
+                    : (<ChooseMembers authUser={user?.userInfo} onChange={onMembersChange} />)}
             </div>
             <div className="steps-action">
                 {current > 0 && (

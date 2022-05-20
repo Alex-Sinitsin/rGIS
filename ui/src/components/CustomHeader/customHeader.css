@@ -13,6 +13,12 @@
     cursor: pointer;
 }
 
+.headerLogo {
+    display: flex;
+    justify-content: flex-start;
+    align-self: center;
+}
+
 .headerUserProfile .avatar {
     background-color: #87d068;
     margin-right: 15px;

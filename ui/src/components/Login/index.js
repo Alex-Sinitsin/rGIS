@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { Form, Input, Button } from 'antd';
+import {Form, Input, Button, Alert} from 'antd';
 import {connect} from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -38,7 +38,7 @@ const Login = ({loginInitiate, auth, user}) => {
                 onFinish={onFinish}
             >
                 <Title className="login-form-title" level={3}>Авторизация</Title>
-                {auth.error && <p>{auth?.error}</p>}
+                {auth.error && <Alert type="error" message={auth?.error} style={{marginBottom: '15px'}} />}
                 <Form.Item
                     name="email"
                     rules={[{ type: "email", required: true }]}

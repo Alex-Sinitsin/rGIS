@@ -3,21 +3,23 @@ import {Select} from "antd";
 import {connect} from "react-redux";
 import {getUsers as getUsersAction} from "../../redux/modules/users";
 
-const {Option, OptGroup} = Select;
+const {Option} = Select;
 
-const ChooseMembers = ({users, getUsers, onChange, selItems, setSelItems}) => {
+const ChooseMembers = ({authUser, users, getUsers, onChange}) => {
 
     useEffect(() => {
         getUsers();
     }, [getUsers]);
 
-    const OPTIONS = ['Apples', 'Nails', 'Bananas', 'Helicopters'];
-    const filteredOptions = OPTIONS.filter(o => !selItems.includes(o));
-
     const handleChange = selectedItems => {
-        setSelItems(selectedItems);
+        const selUsers = selectedItems.map(o => {
+            return users.filter(e => e.name + " " + e.lastName === o);
+        });
+        onChange(selUsers);
         console.log(selectedItems);
     };
+
+    const usersWithOutAuthUser = users.filter(el => el.id !== authUser.id)
 
     return (
         <div>
@@ -28,19 +30,13 @@ const ChooseMembers = ({users, getUsers, onChange, selItems, setSelItems}) => {
                 placeholder="Выберите участника"
                 onChange={handleChange}
             >
-                <OptGroup label="Engineer">
-                    {filteredOptions.map(item => (
-                        <Option key={item} value={item}>
-                            {item}
-                        </Option>
-                    ))}
-                </OptGroup>
+                {usersWithOutAuthUser.map(usr => <Option key={usr.id} value={usr.name + " " + usr.lastName}>{usr.name + " " + usr.lastName + " - " + usr.position}</Option>)}
             </Select>
         </div>
     );
 };
 
 export default connect(
-    ({ users }) => ({ users }),
-    ({getUsers: getUsersAction()})
+    ({users}) => ({users: users.users}),
+    ({getUsers: getUsersAction})
 )(ChooseMembers)

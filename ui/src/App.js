@@ -70,12 +70,12 @@ function App() {
                 </Sider>
             }
             <Layout className="layout" style={{minHeight: '100vh'}}>
-                <Header user={user} setUser={setUser} isTokenExp={isTokenExpired} checkJWT={checkJwtTokenDate}/>
+                <Header user={user} setUser={setUser} isTokenExp={isTokenExpired} setIsTokenExp={setIsTokenExpired} checkJWT={checkJwtTokenDate}/>
                 <Content className="mainContent">
                     <Routes>
                         <Route exact path="/" element={<Home/>}/>
                         <Route path="/login" element={<Login user={user}/>}/>
-                        <Route path="/booking" element={<CreateEvent/>}/>
+                        <Route path="/booking" element={<CreateEvent user={user} />}/>
                         <Route path="/dashboard/users" element={<Users/>}/>
                     </Routes>
                 </Content>

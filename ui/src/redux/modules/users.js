@@ -1,4 +1,4 @@
-import Cookies from 'js-cookie';
+import  Cookies from 'js-cookie';
 import {getItemFromLocalStorage} from "../utils";
 
 const GET_USERS = "GET_USERS";
