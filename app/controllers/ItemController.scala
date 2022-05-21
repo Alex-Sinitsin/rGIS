@@ -9,6 +9,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import utils.auth.{HasSignUpMethod, JWTEnvironment}
 
+import java.util.UUID
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +36,7 @@ class ItemController @Inject()(silhouette: Silhouette[JWTEnvironment],
     * @param itemID ID объекта
     * @return
     */
-  def getItemByID(itemID: Long): Action[AnyContent] = silhouette.SecuredAction.async {
+  def getItemByID(itemID: UUID): Action[AnyContent] = silhouette.SecuredAction.async {
     implicit request: Request[AnyContent] =>
       itemService.retrieveByID(itemID).flatMap {
         case Some(item) => Future.successful(Ok(Json.toJson(item)))
@@ -49,7 +50,7 @@ class ItemController @Inject()(silhouette: Silhouette[JWTEnvironment],
     * @param itemID ID объекта, который необходимо удалить
     * @return Результат выполнения операции
     */
-  def deleteItem(itemID: Long): Action[AnyContent] = silhouette.SecuredAction(hasSignUpMethod[JWTEnvironment#A](CredentialsProvider.ID)).async { implicit request: SecuredRequest[JWTEnvironment, AnyContent] =>
+  def deleteItem(itemID: UUID): Action[AnyContent] = silhouette.SecuredAction(hasSignUpMethod[JWTEnvironment#A](CredentialsProvider.ID)).async { implicit request: SecuredRequest[JWTEnvironment, AnyContent] =>
 
     val currentUser = request.identity
 

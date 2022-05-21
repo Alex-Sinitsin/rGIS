@@ -5,9 +5,10 @@ import play.api.data.Forms._
 import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDateTime
+import java.util.UUID
 
 object EventForm {
-  case class EventData(title: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime, orgUserID: String, members: Option[List[String]], itemID: Long, description: Option[String])
+  case class EventData(title: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime, orgUserID: String, members: Option[List[String]], itemID: String, description: Option[String])
 
   implicit val EventFormat: OFormat[EventData] = Json.format[EventData]
 
@@ -21,7 +22,7 @@ object EventForm {
       "endDateTime" -> localDateTime("yyyy-MM-dd HH:mm"),
       "orgUserID" -> nonEmptyText,
       "members" -> optional(list(text)),
-      "itemID" -> longNumber(1),
+      "itemID" -> nonEmptyText,
       "description" -> optional(text)
     )(EventData.apply)(EventData.unapply)
   )

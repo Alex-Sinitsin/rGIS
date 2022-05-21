@@ -5,6 +5,7 @@ import models.{GisItem, Item, Point, User}
 import modules.MapAPIModule
 import play.api.libs.ws.WSResponse
 
+import java.util.UUID
 import javax.inject.Inject
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{ExecutionContext, Future}
@@ -63,7 +64,7 @@ class ItemService @Inject()(itemDAO: ItemDAO, mapAPI: MapAPIModule)(implicit ex:
           ArrayOfGisItems ++= rstItems ++ bsnItems
 
           ArrayOfGisItems.map(gItem => {
-            itemListToSave += Item(gItem.id.toLong, gItem.name, gItem.address_name, gItem.point.lat, gItem.point.lon, gItem.rubrics(0).name)
+            itemListToSave += Item(UUID.randomUUID(), gItem.name, gItem.address_name, gItem.point.lat, gItem.point.lon, gItem.rubrics(0).name)
           })
 
           itemDAO.add(itemListToSave)
@@ -78,7 +79,7 @@ class ItemService @Inject()(itemDAO: ItemDAO, mapAPI: MapAPIModule)(implicit ex:
     * @param id ID объекта
     * @return Данные объекта, иначе None
     */
-  def retrieveByID(id: Long): Future[Option[Item]] = itemDAO.getByID(id)
+  def retrieveByID(id: UUID): Future[Option[Item]] = itemDAO.getByID(id)
 
   /**
     * Удаляет объект
@@ -87,7 +88,7 @@ class ItemService @Inject()(itemDAO: ItemDAO, mapAPI: MapAPIModule)(implicit ex:
     * @param currentUser Данные авторизованного пользователя
     * @return
     */
-  def delete(itemID: Long, currentUser: User): Future[ItemResult] = {
+  def delete(itemID: UUID, currentUser: User): Future[ItemResult] = {
     if (isAdmin(currentUser)) {
       itemDAO.getByID(itemID).flatMap {
         case Some(_) => itemDAO.delete(itemID).flatMap { delResult =>

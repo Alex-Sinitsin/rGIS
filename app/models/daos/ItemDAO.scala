@@ -7,6 +7,7 @@ import slick.jdbc.PostgresProfile.api._
 import scala.concurrent.{ExecutionContext, Future}
 import models.Item
 
+import java.util.UUID
 import scala.collection.mutable.ArrayBuffer
 
 class ItemDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends DatabaseDAO {
@@ -26,7 +27,7 @@ class ItemDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
    * @param itemID ID объектаб который необходимо получить
    * @return Найденный объект, иначе None
    */
-  def getByID(itemID: Long): Future[Option[Item]] = {
+  def getByID(itemID: UUID): Future[Option[Item]] = {
     db.run(items.filter(_.id === itemID).result.headOption)
   }
 
@@ -56,7 +57,7 @@ class ItemDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
    * @param item Объект для обновления
    * @return Объект, который был обновлен
    */
-  def update(itemID: Long, item: Item): Future[Item] =
+  def update(itemID: UUID, item: Item): Future[Item] =
     db.run(items.filter(_.id === itemID).map(itm => (itm.name, itm.address)).update((item.name, item.address))).map(_ => item)
 
   /**
@@ -65,6 +66,6 @@ class ItemDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
    * @param itemID ID объекта
    * @return
    */
-  def delete(itemID: Long): Future[Boolean] =
+  def delete(itemID: UUID): Future[Boolean] =
     db.run(items.filter(_.id === itemID).delete).map(_ > 0)
 }

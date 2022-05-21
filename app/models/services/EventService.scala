@@ -66,7 +66,7 @@ class EventService @Inject()(eventDAO: EventDAO)(implicit ex: ExecutionContext) 
 
           for {
             createdEvent <-
-              eventDAO.add(Event(-1, eventData.title, eventData.startDateTime, newEndDateTime, UUID.fromString(eventData.orgUserID), eventData.itemID, eventData.description))
+              eventDAO.add(Event(-1, eventData.title, eventData.startDateTime, newEndDateTime, UUID.fromString(eventData.orgUserID), UUID.fromString(eventData.itemID), eventData.description))
             listOfEventMembers = members.flatMap(id => {
               EventMember(id, createdEvent.id) :: eventMembers
             })
@@ -89,7 +89,7 @@ class EventService @Inject()(eventDAO: EventDAO)(implicit ex: ExecutionContext) 
       val lstMb = List.empty[EventMember]
       val membersFormData: List[UUID] = eventData.members.getOrElse(List[String]()).map(UUID.fromString)
       for {
-        updatedEvent <- eventDAO.update(Event(eventID, eventData.title, eventData.startDateTime, newEndDateTime, UUID.fromString(eventData.orgUserID), eventData.itemID, eventData.description))
+        updatedEvent <- eventDAO.update(Event(eventID, eventData.title, eventData.startDateTime, newEndDateTime, UUID.fromString(eventData.orgUserID), UUID.fromString(eventData.itemID), eventData.description))
         _ <- eventDAO.deleteEventMembers(eventID)
         members = membersFormData.flatMap(userID => EventMember(userID, eventID) :: lstMb)
         _ <- eventDAO.addEventMembers(members)

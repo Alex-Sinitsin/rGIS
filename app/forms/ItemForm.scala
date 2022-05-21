@@ -4,6 +4,8 @@ import models.Item
 import play.api.data.Form
 import play.api.data.Forms._
 
+import java.util.UUID
+
 object ItemForm {
 
   /**
@@ -11,7 +13,7 @@ object ItemForm {
    */
   val form: Form[Item] = Form(
     mapping(
-      "id" -> ignored(-1L),
+      "id" -> ignored(UUID.randomUUID()),
       "name" -> nonEmptyText,
       "address" -> nonEmptyText,
       "lat" -> ignored(0.0),

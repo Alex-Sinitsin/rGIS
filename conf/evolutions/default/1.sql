@@ -77,7 +77,7 @@ DROP SCHEMA auth;
 CREATE SCHEMA app;
 
 CREATE TABLE app.items (
-  id      BIGSERIAL   NOT NULL PRIMARY KEY,
+  id      UUID   NOT NULL PRIMARY KEY,
   name    VARCHAR     NOT NULL,
   address VARCHAR     NOT NULL,
   lat     REAL        NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE app.events (
   start_datetime  TIMESTAMP NOT NULL,
   end_datetime    TIMESTAMP NOT NULL,
   org_user_id     UUID      NOT NULL,
-  item_id         BIGINT    NOT NULL,
+  item_id         UUID      NOT NULL,
   description     VARCHAR,
   CONSTRAINT events_user_id_fk FOREIGN KEY (org_user_id) REFERENCES auth.silhouette_users (id) ON DELETE CASCADE,
   CONSTRAINT events_item_id_fk FOREIGN KEY (item_id) REFERENCES app.items (id) ON DELETE CASCADE

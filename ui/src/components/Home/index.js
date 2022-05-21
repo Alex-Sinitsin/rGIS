@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Typography } from 'antd';
+import {useNavigate} from "react-router-dom";
 
 const { Title } = Typography;
 
-const Home = () => {
+const Home = ({ user }) => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!user) navigate('/login');
+    },[navigate, user]);
+
     return (
         <div>
             <Title>Домашняя страница</Title>

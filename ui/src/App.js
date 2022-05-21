@@ -73,7 +73,7 @@ function App() {
                 <Header user={user} setUser={setUser} isTokenExp={isTokenExpired} setIsTokenExp={setIsTokenExpired} checkJWT={checkJwtTokenDate}/>
                 <Content className="mainContent">
                     <Routes>
-                        <Route exact path="/" element={<Home/>}/>
+                        <Route exact path="/" element={<Home user={user} />}/>
                         <Route path="/login" element={<Login user={user}/>}/>
                         <Route path="/booking" element={<CreateEvent user={user} />}/>
                         <Route path="/dashboard/users" element={<Users/>}/>

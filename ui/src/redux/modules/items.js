@@ -7,6 +7,8 @@ const initialState = {
     items: []
 }
 
+const currentUser = getItemFromLocalStorage("auth")
+
 export const itemsReducer = (state = initialState, {type, payload}) => {
     switch (type) {
         case GET_ITEMS:
@@ -20,8 +22,6 @@ export const itemsReducer = (state = initialState, {type, payload}) => {
 }
 
 export const getItems = () => dispatch => {
-    const currentUser = getItemFromLocalStorage("auth")
-
     fetch('api/items', {
             method: 'get',
             headers: {

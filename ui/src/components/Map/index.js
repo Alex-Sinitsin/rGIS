@@ -53,6 +53,7 @@ const MapYandex = ({items, getItems, setSelectedItem}) => {
                                     const pm = ev.get('target');
                                     const name = pm.properties._data.hintContent;
                                     const sItem = items.filter(itm => itm.name === name)[0];
+                                    console.log(sItem)
                                     setSelectedItem(sItem);
                                 }),
                                 modules: ['geoObject.addon.balloon', 'geoObject.addon.hint']

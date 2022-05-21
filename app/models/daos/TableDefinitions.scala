@@ -83,13 +83,13 @@ trait TableDefinitions {
     def startDateTime = column[LocalDateTime]("start_datetime")
     def endDateTime = column[LocalDateTime]("end_datetime")
     def orgUserId = column[UUID]("org_user_id")
-    def itemId = column[Long]("item_id")
+    def itemId = column[UUID]("item_id")
     def description = column[Option[String]]("description")
     def * = (id, title, startDateTime, endDateTime, orgUserId, itemId, description).<> ((Event.apply _).tupled, Event.unapply)
   }
 
   class Items(tag: Tag) extends Table[Item](tag, Some("app"), "items") {
-    def id = column[Long]("id", O.SqlType("SERIAL"), O.PrimaryKey)
+    def id = column[UUID]("id", O.SqlType("SERIAL"), O.PrimaryKey)
     def name = column[String]("name")
     def address = column[String]("address")
     def lat = column[Double]("lat")

@@ -5,13 +5,20 @@ import {MapYandex} from "../index";
 import ChooseEventData from "../ChooseEventData";
 import "./createEvent.css";
 import ChooseMembers from "../ChooseMembers";
+import {connect} from "react-redux";
+import {createEvent as createEventAction} from "../../redux/modules/events";
+import {useNavigate} from "react-router-dom";
 
 const {Step} = Steps;
 
-const CreateEvent = ({user}) => {
-    const [current, setCurrent] = React.useState(2);
-    const [selItems, setSelItems] = React.useState([]);
-    const [eventForm, setEventForm] = React.useState({newEvent: {}, members: []});
+const CreateEvent = ({user, createNewEvent, events}) => {
+    const navigate = useNavigate();
+    const [current, setCurrent] = React.useState(0);
+    const [eventForm, setEventForm] = React.useState({newEvent: {}});
+
+    useEffect(() => {
+        console.log(eventForm)
+    }, [eventForm])
 
     const next = () => {
         setCurrent(current + 1);
@@ -21,14 +28,10 @@ const CreateEvent = ({user}) => {
         setCurrent(current - 1);
     };
 
-    useEffect(() => {
-        console.log(eventForm);
-    }, [eventForm])
-
     const nextButtonClick = () => {
-      if(current === 0 && eventForm.newEvent?.itemId === undefined) {
-          message.warn('Пожалуйста выберите объект, которое хотите забронировать!');
-      } else next();
+        if (current === 0 && eventForm.newEvent?.itemID === undefined) {
+            message.warn('Пожалуйста выберите объект, которое хотите забронировать!');
+        } else next();
     }
 
     const onEventFormFinish = (values) => {
@@ -36,6 +39,7 @@ const CreateEvent = ({user}) => {
             newEvent: {
                 ...prevState.newEvent,
                 title: values.title,
+                orgUserID: user.userInfo.id,
                 startDateTime: values.startDateTime.format('YYYY-MM-DD HH:mm').toString(),
                 endDateTime: values.endDateTime.format('YYYY-MM-DD HH:mm').toString(),
                 description: values.description
@@ -48,13 +52,31 @@ const CreateEvent = ({user}) => {
         setEventForm(prevState => ({
             newEvent: {
                 ...prevState.newEvent,
-                itemId: item.id
+                itemID: item.id
             }
         }));
     }
 
-    const onMembersChange = (membersIds) => {
-        console.log(membersIds);
+    const onMembersChange = (members) => {
+        let userIds = [];
+        members.map(user => userIds.push(user.id))
+        setEventForm(prevState => ({
+            newEvent: {
+                ...prevState.newEvent,
+                members: userIds
+            },
+
+        }));
+    }
+
+    const onEventCreate = () => {
+        createNewEvent(eventForm.newEvent)
+            .then(res => {
+                if (res.status === "success") message.success(res.message, 5);
+                setEventForm({newEvent: {}})
+                navigate('/')
+            })
+            .catch(error => { message.error(error.message, 5) })
     }
 
     const steps = [
@@ -80,8 +102,11 @@ const CreateEvent = ({user}) => {
                     (<MapYandex setSelectedItem={onSelectMapItem}/>)
                     : (<></>)}
                 {current === 1 ?
-                    (<ChooseEventData onFormFinish={onEventFormFinish}/>)
-                    : (<ChooseMembers authUser={user?.userInfo} onChange={onMembersChange} />)}
+                    (<ChooseEventData onFormFinish={onEventFormFinish} data={eventForm.newEvent}/>)
+                    : (<></>)}
+                {current === 2 ?
+                    (<ChooseMembers authUser={user?.userInfo} onChange={onMembersChange}/>)
+                    : (<></>)}
             </div>
             <div className="steps-action">
                 {current > 0 && (
@@ -95,7 +120,7 @@ const CreateEvent = ({user}) => {
                     </Button>
                 )}
                 {current === steps.length - 1 && (
-                    <Button type="primary" onClick={() => message.success('Успешно создано!')}>
+                    <Button type="primary" onClick={onEventCreate}>
                         Готово
                     </Button>
                 )}
@@ -104,4 +129,7 @@ const CreateEvent = ({user}) => {
     );
 };
 
-export default CreateEvent;
+export default connect(
+    ({events}) => ({events: events}),
+    ({createNewEvent: createEventAction})
+)(CreateEvent)
