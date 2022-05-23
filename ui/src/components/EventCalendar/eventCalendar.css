@@ -1,0 +1,41 @@
+.fc .fc-button-primary, .fc .fc-button-primary.fc-button-active {
+    box-shadow: none !important;
+}
+
+.fc-today-button {
+    line-height: 24px !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: #C8E6C9;
+}
+
+.fc-daygrid-day-number {
+    color: #000;
+    font-weight: 500;
+}
+
+.fc-daygrid-dot-event {
+    flex-direction: column;
+    justify-content: center;
+}
+
+.fc-daygrid-body .eventCell {
+    width: 100%;
+    padding: 0 5px;
+}
+
+.fc-daygrid-body .eventCellTimeText {
+    display: block;
+    font-size: 11px;
+    margin-bottom: -3px;
+}
+
+.fc-daygrid-body .eventCellTitleText {
+    display: block;
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+}

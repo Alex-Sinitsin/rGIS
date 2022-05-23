@@ -3,6 +3,8 @@ import Login from "./Login";
 import CustomHeader from "./CustomHeader";
 import MapYandex from "./Map";
 import CreateEvent from "./CreateEvent";
+import EventCalendar from "./EventCalendar";
+import EventInfoModal from "./EventInfoModal";
 
 export {
     Home,
@@ -10,4 +12,6 @@ export {
     CreateEvent,
     CustomHeader,
     MapYandex,
+    EventCalendar,
+    EventInfoModal,
 }

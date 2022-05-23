@@ -28,8 +28,8 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
     const content = () => {
       return (
           <div className='popover-content'>
-              <Link to="/dashboard"><Button type="ghost"> <DashboardOutlined /> Панель управления</Button></Link>
-              <Button type="primary" style={{display: 'block', width: '100%', margin: '10px 0 0 0'}} onClick={logoutUser}><LogoutOutlined/> Выйти</Button>
+              {user.userInfo.role === 'Admin' && <Link to="/dashboard"><Button type="ghost"> <DashboardOutlined /> Панель управления</Button></Link>}
+              <Button type="primary" style={{display: 'block', minWidth: '188px', width: '100%', margin: '10px 0 0 0'}} onClick={logoutUser}><LogoutOutlined/> Выйти</Button>
           </div>
       )
     }
@@ -76,7 +76,7 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
                             <Popover placement="bottomLeft" className='userProfilePopover' content={content} trigger="click">
                                 <Avatar className="avatar" size={43} icon={<UserOutlined/>}/>
                                 <div className="userInfo">
-                                    <Text className="name">{user?.userInfo?.name + user?.userInfo?.lastName}</Text>
+                                    <Text className="name">{user?.userInfo?.name + " " + user?.userInfo?.lastName}</Text>
                                     <Text className="position">{user?.userInfo?.position}</Text>
                                 </div>
                                 <CaretDownOutlined style={{color: '#fff', marginLeft: '10px'}}/>

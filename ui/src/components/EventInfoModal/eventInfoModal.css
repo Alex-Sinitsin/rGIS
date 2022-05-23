@@ -1,0 +1,61 @@
+.companyInfo {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.companyInfo .companyName {
+    display: inline-block;
+    margin-bottom: 0;
+    color: #D50000;
+}
+
+.companyInfo .companyRubric {
+    position: absolute;
+    top: 0;
+    font-size: 10px;
+    background-color: #3949AB;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-left: 8px;
+}
+
+.companyInfo .companyAddress {
+    display: block;
+}
+
+.eventDateTime {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.eventMembers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    margin-top: 5px;
+}
+
+.eventMembers .member, .orgUserInfo {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 5px 8px;
+}
+
+.eventMembers .memberInfo, .orgUserInfo .userInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.eventMembers .memberInfo .memberName, .orgUserInfo .memberName {
+    font-size: 14px;
+}
+
+.eventMembers .memberInfo .memberPosition, .orgUserInfo .memberName {
+    font-size: 12px;
+}

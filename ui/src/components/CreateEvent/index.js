@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Steps, Button, message} from 'antd';
 
 import {MapYandex} from "../index";
@@ -11,14 +11,10 @@ import {useNavigate} from "react-router-dom";
 
 const {Step} = Steps;
 
-const CreateEvent = ({user, createNewEvent, events}) => {
+const CreateEvent = ({user, createNewEvent}) => {
     const navigate = useNavigate();
     const [current, setCurrent] = React.useState(0);
     const [eventForm, setEventForm] = React.useState({newEvent: {}});
-
-    useEffect(() => {
-        console.log(eventForm)
-    }, [eventForm])
 
     const next = () => {
         setCurrent(current + 1);
