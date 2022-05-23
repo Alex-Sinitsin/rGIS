@@ -1,15 +1,15 @@
 package models.services
 
 import forms.EventForm.EventData
+import models.daos.{EventDAO, UserDAO}
 import models.{Event, EventMember, User}
-import models.daos.EventDAO
 
 import java.time.{Duration, LocalDateTime}
 import java.util.UUID
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class EventService @Inject()(eventDAO: EventDAO)(implicit ex: ExecutionContext) {
+class EventService @Inject()(eventDAO: EventDAO, userDAO: UserDAO)(implicit ex: ExecutionContext) {
 
   /**
     * Извлекает список событий
@@ -17,6 +17,12 @@ class EventService @Inject()(eventDAO: EventDAO)(implicit ex: ExecutionContext) 
     * @return
     */
   def retrieveAll: Future[Seq[Event]] = eventDAO.getAll
+
+  def getEventMembers(eventID: Long): Future[Seq[User]] = {
+    val memberIDs = List.empty[UUID]
+    val members = eventDAO.getEventMembers(eventID).map(list => list.flatMap(member => member.userID :: memberIDs).toList)
+    members.flatMap(memberIds => userDAO.findUsersByID(memberIds))
+  }
 
   /**
     * Функция обрабатывает дату и время окончания события
@@ -39,9 +45,7 @@ class EventService @Inject()(eventDAO: EventDAO)(implicit ex: ExecutionContext) 
     * @param eventID ID события
     * @return
     */
-  def getEventByID(eventID: Long): Future[Option[Event]] = {
-    eventDAO.getByID(eventID)
-  }
+  def getEventByID(eventID: Long): Future[Option[Event]] = eventDAO.getByID(eventID)
 
   /**
     * Метод сохраняет новое событие
@@ -110,27 +114,27 @@ class EventService @Inject()(eventDAO: EventDAO)(implicit ex: ExecutionContext) 
 
     updateEventFunction(eventID, eventData, LocalDateTime.now(), currentUser)
 
-        val newEndDateTime: LocalDateTime = newEventDateTimeBuilder(eventData.endDateTime)
+    val newEndDateTime: LocalDateTime = newEventDateTimeBuilder(eventData.endDateTime)
 
-        val compareDateTimeValue = eventData.startDateTime compareTo eventData.endDateTime
+    val compareDateTimeValue = eventData.startDateTime compareTo eventData.endDateTime
 
-        if (compareDateTimeValue > 0) Future.successful(InvalidEndDate)
-        else if (compareDateTimeValue == 0) Future.successful(DateTimeEqualException)
-        else {
-          eventDAO.getByID(eventID).flatMap {
-            case Some(eventWithID) =>
-              if (eventWithID.startDateTime != eventData.startDateTime && eventWithID.endDateTime != eventData.endDateTime) {
-                eventDAO.getByDateTime(eventData.startDateTime, eventData.endDateTime).flatMap {
-                  case Some(eventWithDateTime) =>
-                    if (eventWithDateTime.id == eventID)
-                      updateEventFunction(eventID, eventData, newEndDateTime, currentUser)
-                    else Future.successful(EventAlreadyExists)
-                  case None => updateEventFunction(eventID, eventData, newEndDateTime, currentUser)
-                }
-              } else updateEventFunction(eventID, eventData, newEndDateTime, currentUser)
-            case None => Future.successful(EventNotFound)
-          }
-        }
+    if (compareDateTimeValue > 0) Future.successful(InvalidEndDate)
+    else if (compareDateTimeValue == 0) Future.successful(DateTimeEqualException)
+    else {
+      eventDAO.getByID(eventID).flatMap {
+        case Some(eventWithID) =>
+          if (eventWithID.startDateTime != eventData.startDateTime && eventWithID.endDateTime != eventData.endDateTime) {
+            eventDAO.getByDateTime(eventData.startDateTime, eventData.endDateTime).flatMap {
+              case Some(eventWithDateTime) =>
+                if (eventWithDateTime.id == eventID)
+                  updateEventFunction(eventID, eventData, newEndDateTime, currentUser)
+                else Future.successful(EventAlreadyExists)
+              case None => updateEventFunction(eventID, eventData, newEndDateTime, currentUser)
+            }
+          } else updateEventFunction(eventID, eventData, newEndDateTime, currentUser)
+        case None => Future.successful(EventNotFound)
+      }
+    }
   }
 
   /**
@@ -144,10 +148,12 @@ class EventService @Inject()(eventDAO: EventDAO)(implicit ex: ExecutionContext) 
     eventDAO.getByID(eventID).flatMap {
       case Some(eventData) =>
         if (currentUser.id == eventData.orgUserId || currentUser.role.contains("Admin")) {
-          eventDAO.delete(eventID).flatMap { eventID => {
-            eventDAO.deleteEventMembers(eventID)
-            Future.successful(EventDeleted(eventID))
-          }}
+          eventDAO.delete(eventID).flatMap {
+            eventID => {
+              eventDAO.deleteEventMembers(eventID)
+              Future.successful(EventDeleted(eventID))
+            }
+          }
         } else Future.successful(EventCreatedByAnotherUser("delete"))
       case None => Future.successful(EventNotFound)
     }

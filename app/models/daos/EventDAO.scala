@@ -50,6 +50,12 @@ class EventDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(events.result)
   }
 
+  /**
+    * Получение участников события по его ID
+    *
+    * @param eventID - ID события
+    * @return Список участников
+    */
   def getEventMembers(eventID: Long): Future[Seq[EventMember]] = {
     db.run(members.filter(_.eventId === eventID).result)
   }

@@ -4,7 +4,7 @@ import com.mohiva.play.silhouette.api.Silhouette
 import com.mohiva.play.silhouette.api.actions.SecuredRequest
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import forms.EventForm
-import models.{Event, User}
+import models.{Event, EventWithAdditionalInfo, User}
 import models.services._
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -23,10 +23,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class EventController @Inject()(silhouette: Silhouette[JWTEnvironment],
                                 controllerComponents: ControllerComponents,
                                 eventService: EventService,
+                                userService: UserService,
+                                itemService: ItemService,
                                 hasSignUpMethod: HasSignUpMethod)
                                (implicit ex: ExecutionContext) extends AbstractController(controllerComponents) {
-
-  case class EventWithOrgUserInfo(event: Event, orgUserInfo: User)
 
   /**
    * Выводит список всех событий
@@ -47,7 +47,16 @@ class EventController @Inject()(silhouette: Silhouette[JWTEnvironment],
    */
   def getEventByID(eventID: Long): Action[AnyContent] = silhouette.SecuredAction.async { implicit request: Request[AnyContent] =>
     eventService.getEventByID(eventID).flatMap {
-      case Some(event) => Future.successful(Ok(Json.toJson(event)))
+      case Some(event) =>
+        val itemInfo = itemService.retrieveByID(event.itemId).map(item => item.get)
+        val orgUserInfo = userService.retrieveByID(event.orgUserId).map(user => user.get)
+        val members = eventService.getEventMembers(eventID).map(_.toList)
+
+        orgUserInfo.flatMap(userInfo => {
+          itemInfo.flatMap(itmInfo => {
+            members.flatMap(mb => Future.successful(Ok(Json.toJson(EventWithAdditionalInfo(event, userInfo, itmInfo, Some(mb))))))
+          })
+        })
       case None => Future.successful(NotFound(Json.toJson(Json.obj("status" -> "error", "code" -> NOT_FOUND, "message" -> "Событие не найдено!"))))
     }
   }
