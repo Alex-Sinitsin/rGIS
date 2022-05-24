@@ -4,6 +4,7 @@
     background-color: #fff;
     padding: 10px;
     height: calc(100vh - 75px);
+    overflow-y: auto;
 }
 
 .loginButtonText,

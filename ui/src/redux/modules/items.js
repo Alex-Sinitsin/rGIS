@@ -22,7 +22,7 @@ export const itemsReducer = (state = initialState, {type, payload}) => {
 }
 
 export const getItems = () => dispatch => {
-    fetch('api/items', {
+    fetch('http://' + window.location.host + '/api/items', {
             method: 'get',
             headers: {
                 "Csrf-Token": Cookies.get('csrfCookie'),

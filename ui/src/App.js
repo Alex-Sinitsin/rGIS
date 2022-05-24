@@ -6,16 +6,18 @@ import {
     Route,
     Link,
     useMatch,
+    useNavigate,
 } from "react-router-dom";
 
 import {Avatar, Layout, Menu} from 'antd';
 import {
-    AppstoreAddOutlined, DashboardOutlined,
+    AppstoreAddOutlined, AppstoreOutlined, DashboardOutlined,
     HomeOutlined, UserSwitchOutlined,
 } from '@ant-design/icons';
 import {CustomHeader as Header, Home, Login, CreateEvent} from "./components"
 import {connect} from "react-redux";
 import Users from "./components/AdminPanel/Users";
+import Items from "./components/AdminPanel/Items/items";
 import moment from "moment";
 
 const {Sider, Content} = Layout;
@@ -25,6 +27,7 @@ function App() {
     const [isTokenExpired, setIsTokenExpired] = useState(false);
     const pathnameLocation = window.location.pathname;
     const match = useMatch({path: pathnameLocation, end: true});
+    const navigate = useNavigate();
 
     const checkJwtTokenDate = (token) => {
         if (token) {
@@ -57,11 +60,15 @@ function App() {
                             <Menu.SubMenu title='Панель управления'
                                           className={
                                               match.pathname === '/dashboard' ||
-                                              match.pathname === '/dashboard/users'
+                                              match.pathname === '/dashboard/users' ||
+                                              match.pathname === '/dashboard/items'
                                                   ? "ant-menu-item-selected" : ""
                                           }
                                           key='3' mode={'inline'} icon={<DashboardOutlined/>}>
                                 <Menu.Item key="3.1">
+                                    <Link to="/dashboard/items"><AppstoreOutlined style={{marginRight: '10px'}}/>Помещения / объекты</Link>
+                                </Menu.Item>
+                                <Menu.Item key="3.2">
                                     <Link to="/dashboard/users"><UserSwitchOutlined style={{marginRight: '10px'}}/>Пользователи</Link>
                                 </Menu.Item>
                             </Menu.SubMenu>
@@ -76,7 +83,9 @@ function App() {
                         <Route exact path="/" element={<Home user={user} />}/>
                         <Route path="/login" element={<Login user={user}/>}/>
                         <Route path="/booking" element={<CreateEvent user={user} />}/>
+                        <Route path="/dashboard" render={() => navigate("/dashboard/users")}/>
                         <Route path="/dashboard/users" element={<Users/>}/>
+                        <Route path="/dashboard/items" element={<Items/>}/>
                     </Routes>
                 </Content>
             </Layout>

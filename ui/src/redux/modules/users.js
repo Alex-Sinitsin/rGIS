@@ -22,7 +22,7 @@ export const usersReducer = (state = initialState, {type, payload}) => {
 export const getUsers = () => dispatch => {
     const currentUser = getItemFromLocalStorage("auth")
 
-    fetch('api/users', {
+    fetch('http://' + window.location.host + '/api/users', {
             method: 'get',
             headers: {
                 "Csrf-Token": Cookies.get('csrfCookie'),
