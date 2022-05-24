@@ -1,5 +1,5 @@
 import React from 'react';
-import {Avatar, Modal, Typography} from "antd";
+import {Avatar, Modal, Tag, Typography} from "antd";
 
 import "./eventInfoModal.css";
 import moment from "moment";
@@ -16,13 +16,20 @@ const EventInfoModal = ({modalVisible, setModalVisible, eventInfo}) => {
             visible={modalVisible}
             onOk={() => setModalVisible(false)}
             onCancel={() => setModalVisible(false)}
+            footer={null}
+            cancelButtonProps={{ hidden: true }}
         >
             <Title level={3}>{eventInfo?.event?.title}</Title>
             <Text strong>Место встречи: </Text>
             <div className="companyInfo">
                 <Title level={4} className="companyName">{eventInfo?.item?.name}</Title>
-                <Text className="companyRubric" strong
-                      style={{backgroundColor: eventInfo?.item?.rubric !== 'Рестораны' ? "#3949AB" : "#E64A19"}}>{eventInfo?.item?.rubric}</Text>
+                {
+                    eventInfo?.item?.rubric === 'Рестораны' ?
+                        <Tag className="companyRubric" color="magenta"><Text style={{color: 'inherit'}} strong>{eventInfo?.item?.rubric}</Text></Tag> :
+                    eventInfo?.item?.rubric === 'Бизнес-центры' ?
+                        <Tag className="companyRubric" color="geekblue"><Text style={{color: 'inherit'}} strong>{eventInfo?.item?.rubric}</Text></Tag> :
+                        <Tag className="companyRubric" color="green"><Text style={{color: 'inherit'}} strong>{eventInfo?.item?.rubric}</Text></Tag>
+                }
                 <Text className="companyAddress" strong italic>{eventInfo?.item?.address}</Text>
             </div>
             <Text strong>Время проведения: </Text>
@@ -30,30 +37,36 @@ const EventInfoModal = ({modalVisible, setModalVisible, eventInfo}) => {
                 {moment(eventInfo?.event?.startDateTime).locale('ru').format("LL LT")}
                 <ArrowRightOutlined style={{fontSize: 12, margin: '0 7px'}}/>
                 {moment(eventInfo?.event?.endDateTime).minutes().toString() === "59" ?
-                    moment(eventInfo?.event?.endDateTime).add(1, 'minutes').locale('ru').format("LL LT") : moment(eventInfo?.event?.endDateTime).locale('ru').format("LL LT")}
+                    moment(eventInfo?.event?.endDateTime).add(1, 'minutes').locale('ru').format("LL LT") :
+                    moment(eventInfo?.event?.endDateTime).locale('ru').format("LL LT")}
             </Text>
             <Text strong style={{display: 'block', marginBottom: '5px'}}>Организатор: </Text>
             <div className="orgUserInfo">
                 <Avatar style={{backgroundColor: '#00796B'}} size={35} icon={<UserOutlined/>}/>
                 <div className="userInfo">
-                    <Text strong className="orgUserName">{eventInfo?.orgUser?.name + " " + eventInfo?.orgUser?.lastName}</Text>
+                    <Text strong
+                          className="orgUserName">{eventInfo?.orgUser?.name + " " + eventInfo?.orgUser?.lastName}</Text>
                     <Text className="orgUsermemberPosition">{eventInfo?.orgUser?.position}</Text>
                 </div>
             </div>
-            <Text strong style={{display: 'block', marginTop: '5px'}}>Участники: </Text>
-            <div className="eventMembers">
-                {eventInfo?.members?.map(member => {
-                    return (
-                        <div className="member" key={member.id}>
-                            <Avatar style={{backgroundColor: '#87d068'}} size={33} icon={<UserOutlined/>}/>
-                            <div className="memberInfo">
-                                <Text strong className="memberName">{member.name + " " + member.lastName}</Text>
-                                <Text className="memberPosition">{member.position}</Text>
-                            </div>
-                        </div>
-                    )
-                })}
-            </div>
+            {eventInfo?.members?.length > 0 &&
+                <>
+                    <Text strong style={{display: 'block', marginTop: '5px'}}>Участники: </Text>
+                    <div className="eventMembers">
+                        {eventInfo?.members?.map(member => {
+                            return (
+                                <div className="member" key={member.id}>
+                                    <Avatar style={{backgroundColor: '#87d068'}} size={33} icon={<UserOutlined/>}/>
+                                    <div className="memberInfo">
+                                        <Text strong className="memberName">{member.name + " " + member.lastName}</Text>
+                                        <Text className="memberPosition">{member.position}</Text>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </>
+            }
             <Text strong style={{display: 'block', marginTop: '5px'}}>Описание: </Text>
             <div className="description">{eventInfo?.event?.description}</div>
         </Modal>

@@ -52,12 +52,12 @@ export const createEventFail = (error) => ({
     payload: error
 });
 
-export const getEvents = () => dispatch => {
+export const getEvents = (token) => dispatch => {
     fetch('api/events', {
             method: 'get',
             headers: {
                 "Csrf-Token": Cookies.get('csrfCookie'),
-                "X-AUTH-TOKEN": currentUser?.accessToken,
+                "X-AUTH-TOKEN": token,
                 "Content-type": "application/json"
             },
         }

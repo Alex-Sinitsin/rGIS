@@ -1,29 +1,31 @@
 import React, {createRef, useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import {getEvents as getEventsAction, getOneEvent as getOneEventAction} from "../../redux/modules/events";
-import {UnorderedListOutlined} from "@ant-design/icons";
+import {useNavigate} from "react-router-dom";
 import {Col, Row, Typography} from "antd";
+import {UnorderedListOutlined} from "@ant-design/icons";
 
 import FullCalendar from '@fullcalendar/react'
 import ruLocale from '@fullcalendar/core/locales/ru';
 import dayGridPlugin from '@fullcalendar/daygrid'
 import listPlugin from '@fullcalendar/list'
-import interactionPlugin from '@fullcalendar/interaction'
 
+import interactionPlugin from '@fullcalendar/interaction'
 import "./eventCalendar.css";
 import {EventInfoModal} from "../index";
 import moment from "moment";
 
 const {Title, Text} = Typography;
 
-const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
+const EventCalendar = ({user, auth, events, singleEvent, getEvents, getOneEvent}) => {
+    const navigate = useNavigate()
     const calendarRef = createRef();
     const [eventList, setEventList] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
-        getEvents();
-    }, [getEvents]);
+        user && getEvents(user?.accessToken);
+    }, [auth.user, getEvents]);
 
     useEffect(() => {
         const fEventList = getFormattedEventList(events);
@@ -87,10 +89,18 @@ const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
                         eventContent={renderEventContent}
                         displayEventEnd={true}
                         dayMaxEventRows={2}
+                        customButtons ={{
+                            addEventButton: {
+                                text: "Добавить мероприятие",
+                                click: () => {
+                                    navigate('/booking')
+                                }
+                            }
+                        }}
                         headerToolbar={{
                             left: 'prev,today,next',
                             center: 'title',
-                            right: 'dayGridMonth,listMonth'
+                            right: 'addEventButton,dayGridMonth,listMonth'
                         }}
                         buttonText={{
                             listMonth: 'Расписание'

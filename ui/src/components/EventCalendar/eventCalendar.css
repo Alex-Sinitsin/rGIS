@@ -39,3 +39,18 @@
     text-overflow: ellipsis;
     font-size: 12px;
 }
+
+.fc-list-event-title {
+    cursor: pointer;
+}
+
+.fc-addEventButton-button {
+    margin-right: 10px !important;
+    border-bottom-right-radius: 0.25em !important;
+    border-top-right-radius: 0.25em !important;
+}
+
+.fc-dayGridMonth-button {
+    border-bottom-left-radius: 0.25em !important;
+    border-top-left-radius: 0.25em !important;
+}
