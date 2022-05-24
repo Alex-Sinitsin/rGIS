@@ -3,8 +3,9 @@ import {connect} from "react-redux";
 import {getItems as getItemsAction} from "../../../redux/modules/items";
 import "./items.css";
 import {Table, Tag, Typography} from 'antd';
+import {EnvironmentOutlined} from "@ant-design/icons";
 const { Column } = Table;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const Items = ({ items, getItems }) => {
 
@@ -16,7 +17,14 @@ const Items = ({ items, getItems }) => {
     return (
         <Table dataSource={items} title={() => <Title level={2}>Список помещений / объектов</Title>}>
             <Column title="Название" dataIndex="name" key="name" />
-            <Column title="Адрес" dataIndex="address" key="address" />
+            <Column
+                title="Адрес"
+                dataIndex="address"
+                key="address"
+                render={(_, record) => (
+                    <Text><EnvironmentOutlined style={{color: 'red', fontSize: 16, marginRight: '5px'}} />{record.address}</Text>
+                )}
+            />
             <Column
                 title="Категория"
                 dataIndex="rubric"
