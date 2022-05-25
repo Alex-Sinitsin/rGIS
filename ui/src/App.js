@@ -6,7 +6,6 @@ import {
     Route,
     Link,
     useMatch,
-    useNavigate,
 } from "react-router-dom";
 
 import {Avatar, Layout, Menu} from 'antd';
@@ -14,7 +13,7 @@ import {
     AppstoreAddOutlined, AppstoreOutlined, DashboardOutlined,
     HomeOutlined, UserSwitchOutlined,
 } from '@ant-design/icons';
-import {CustomHeader as Header, Home, Login, CreateEvent} from "./components"
+import {CustomHeader as Header, Home, Login, CreateEvent, Dashboard} from "./components"
 import {connect} from "react-redux";
 import Users from "./components/AdminPanel/Users";
 import Items from "./components/AdminPanel/Items/items";
@@ -27,7 +26,6 @@ function App() {
     const [isTokenExpired, setIsTokenExpired] = useState(false);
     const pathnameLocation = window.location.pathname;
     const match = useMatch({path: pathnameLocation, end: true});
-    const navigate = useNavigate();
 
     const checkJwtTokenDate = (token) => {
         if (token) {
@@ -83,7 +81,7 @@ function App() {
                         <Route exact path="/" element={<Home user={user} />}/>
                         <Route path="/login" element={<Login user={user}/>}/>
                         <Route path="/booking" element={<CreateEvent user={user} />}/>
-                        <Route path="/dashboard" render={() => navigate("/dashboard/users")}/>
+                        <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/dashboard/users" element={<Users/>}/>
                         <Route path="/dashboard/items" element={<Items/>}/>
                     </Routes>

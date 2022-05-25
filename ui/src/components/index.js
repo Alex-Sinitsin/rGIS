@@ -1,5 +1,6 @@
 import Home from "./Home";
 import Login from "./Login";
+import Dashboard from "./AdminPanel/Dashboard";
 import CustomHeader from "./CustomHeader";
 import MapYandex from "./Map";
 import CreateEvent from "./CreateEvent";
@@ -9,6 +10,7 @@ import EventInfoModal from "./EventInfoModal";
 export {
     Home,
     Login,
+    Dashboard,
     CreateEvent,
     CustomHeader,
     MapYandex,
