@@ -6,6 +6,9 @@ import MapYandex from "./Map";
 import CreateEvent from "./CreateEvent";
 import EventCalendar from "./EventCalendar";
 import EventInfoModal from "./EventInfoModal";
+import ForbiddenElement from "./UnauthorizedElement";
+import AdminUsers from "./AdminPanel/Users";
+import AdminItems from "./AdminPanel/Items";
 
 export {
     Home,
@@ -16,4 +19,7 @@ export {
     MapYandex,
     EventCalendar,
     EventInfoModal,
+    ForbiddenElement,
+    AdminUsers,
+    AdminItems,
 }

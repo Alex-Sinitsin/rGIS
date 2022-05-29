@@ -13,10 +13,8 @@ import {
     AppstoreAddOutlined, AppstoreOutlined, DashboardOutlined,
     HomeOutlined, UserSwitchOutlined,
 } from '@ant-design/icons';
-import {CustomHeader as Header, Home, Login, CreateEvent, Dashboard} from "./components"
+import {CustomHeader as Header, Home, Login, CreateEvent, Dashboard, AdminUsers, AdminItems, ForbiddenElement} from "./components"
 import {connect} from "react-redux";
-import Users from "./components/AdminPanel/Users";
-import Items from "./components/AdminPanel/Items/items";
 import moment from "moment";
 
 const {Sider, Content} = Layout;
@@ -78,12 +76,12 @@ function App() {
                 <Header user={user} setUser={setUser} isTokenExp={isTokenExpired} setIsTokenExp={setIsTokenExpired} checkJWT={checkJwtTokenDate}/>
                 <Content className="mainContent">
                     <Routes>
-                        <Route exact path="/" element={<Home user={user} />}/>
+                        <Route exact path="/" element={user ? <Home user={user} /> : <ForbiddenElement /> }/>
                         <Route path="/login" element={<Login user={user}/>}/>
-                        <Route path="/booking" element={<CreateEvent user={user} />}/>
-                        <Route path="/dashboard" element={<Dashboard/>}/>
-                        <Route path="/dashboard/users" element={<Users/>}/>
-                        <Route path="/dashboard/items" element={<Items/>}/>
+                        <Route path="/booking" element={user ? <CreateEvent user={user} /> : <ForbiddenElement />}/>
+                        <Route path="/dashboard" element={user ? <Dashboard/> : <ForbiddenElement />}/>
+                        <Route path="/dashboard/users" element={user ? <AdminUsers/> : <ForbiddenElement />}/>
+                        <Route path="/dashboard/items" element={user ? <AdminItems/> : <ForbiddenElement />}/>
                     </Routes>
                 </Content>
             </Layout>

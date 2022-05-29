@@ -7,7 +7,7 @@ import {EnvironmentOutlined} from "@ant-design/icons";
 const { Column } = Table;
 const { Title, Text } = Typography;
 
-const Items = ({ items, getItems }) => {
+const Index = ({ items, getItems }) => {
 
     useEffect(() => {
         getItems();
@@ -40,4 +40,4 @@ const Items = ({ items, getItems }) => {
 export default connect(
     ({items}) => ({items: items.items}),
     ({getItems: getItemsAction})
-)(Items);
+)(Index);

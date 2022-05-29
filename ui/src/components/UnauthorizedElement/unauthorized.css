@@ -1,0 +1,9 @@
+.unauthorizedContainer {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% + 20px);
+    align-items: center;
+    justify-content: center;
+    background-color: #eaeaea;
+    margin: -10px;
+}
