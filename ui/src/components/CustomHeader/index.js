@@ -82,7 +82,7 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
                                 <CaretDownOutlined style={{color: '#fff', marginLeft: '10px'}}/>
                             </Popover>
                         </>
-                    ) : (<Link to="/login" style={{marginRight: '15px'}}><Button type="primary"><LoginOutlined/> Войти</Button></Link>)}
+                    ) : (<div className="signInBlock"><Link to="/login" style={{marginRight: '15px'}}><Button type="primary"><LoginOutlined/> Войти</Button></Link></div>)}
                 </Col>
             </Row>
         </Header>
