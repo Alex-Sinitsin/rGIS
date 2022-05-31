@@ -19,7 +19,7 @@ trait UserDAO extends DatabaseDAO {
    * @param role   Новая роль, которую необходимо присвоить пользователю
    * @return
    */
-  def updateUserRole(userId: UUID, role: String): Future[Boolean]
+  def updateUserRole(userId: UUID, role: String): Future[String]
 
   /**
    * Находит пользователя по информации для входа

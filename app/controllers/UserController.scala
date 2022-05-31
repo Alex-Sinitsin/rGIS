@@ -74,8 +74,8 @@ class UserController @Inject()(silhouette: Silhouette[JWTEnvironment],
         roleId =>
           request.identity.role match {
             case Some("Admin") =>
-              userService.changeUserRole(userID, UserRoles.toHumanReadable(roleId)).flatMap(updResult =>
-                if (updResult) Future.successful(Ok(Json.toJson(Json.obj("status" -> "success", "message" -> "Роль пользователя успешно обновлена!"))))
+              userService.changeUserRole(userID, UserRoles.toHumanReadable(roleId)).flatMap(role =>
+                if (role.nonEmpty) Future.successful(Ok(Json.toJson(Json.obj("status" -> "success", "message" -> "Роль пользователя успешно обновлена!", "payload" -> Json.toJson((userID, role))))))
                 else Future.successful(BadRequest(Json.toJson(Json.obj("status" -> "error", "code" -> INTERNAL_SERVER_ERROR, "message" -> "Произошла ошибка при изменении роли пользователя!")))))
             case _ => Future.successful(Forbidden(Json.toJson(Json.obj("status" -> "error", "code" -> FORBIDDEN, "message" -> "Недостаточно прав для выполнения операции!"))))
           }

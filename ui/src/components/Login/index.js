@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Form, Input, Button, Alert} from 'antd';
 import {connect} from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,12 +13,14 @@ import Title from "antd/es/typography/Title";
 const Login = ({loginInitiate, auth, user}) => {
 
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if(user) navigate('/');
     },[auth.user, navigate, user]);
 
     const onFinish = (values) => {
+        setLoading(true);
         loginInitiate(values.email, values.password);
     };
 
@@ -57,8 +59,8 @@ const Login = ({loginInitiate, auth, user}) => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
-                        <LoginOutlined /> Войти
+                    <Button type="primary" htmlType="submit" className="login-form-button" loading={loading} icon={<LoginOutlined />}>
+                        Войти
                     </Button>
                 </Form.Item>
             </Form>

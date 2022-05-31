@@ -101,8 +101,8 @@ class UserDAOImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
    * @param role   Новая роль, которую необходимо присвоить пользователю
    *  @return
    */
-  override def updateUserRole(userId: UUID, role: String): Future[Boolean] = {
-    db.run(users.filter(_.id === userId).map(_.roleId).update(UserRoles.toDBReadable(role))).map(_ > 0)
+  override def updateUserRole(userId: UUID, role: String): Future[String] = {
+    db.run(users.filter(_.id === userId).map(_.roleId).update(UserRoles.toDBReadable(role))).flatMap(_ => Future.successful(role))
   }
 
   /**

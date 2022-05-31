@@ -35,7 +35,7 @@ trait UserService extends IdentityService[User] {
    * @param role   Новая роль, которую необходимо присвоить пользователю
    * @return
    */
-  def changeUserRole(userId: UUID, role: String): Future[Boolean]
+  def changeUserRole(userId: UUID, role: String): Future[String]
 
   /**
    * Извлекает пару информации о пользователе и информации для входа по идентификатору пользователя и идентификатору поставщика информации для входа

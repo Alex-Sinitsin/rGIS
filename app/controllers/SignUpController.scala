@@ -44,7 +44,7 @@ class SignUpController @Inject()(ControllerComponents: MessagesControllerCompone
                 signUpService.signUpByCredentials(data).map {
                   case UserCreated(user) =>
                     silhouette.env.eventBus.publish(SignUpEvent(user, request))
-                    Created(Json.toJson(Json.obj("status" -> "success", "message" -> "Пользователь успешно добавлен!")))
+                    Created(Json.toJson(Json.obj("status" -> "success", "message" -> "Пользователь успешно добавлен!", "payload" -> user)))
                   case UserAlreadyExists =>
                     Conflict(Json.toJson(Json.obj("status" -> "error", "code" -> CONFLICT, "message" -> "Пользователь уже существует!")))
                 }
