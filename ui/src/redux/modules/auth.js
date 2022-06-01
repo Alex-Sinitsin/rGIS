@@ -70,26 +70,30 @@ export const loginInitiate = (email, password) => dispatch => {
         password: password
     }
 
-    fetch('api/signIn', {
-            method: 'post',
-            headers: {
-                "Csrf-Token": Cookies.get('csrfCookie'),
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(loginData),
-        }
-    )
-        .then(response => response.json())
-        .then((userData) => {
-            const user = userData.data
-            if(userData.status === "success") {
-                dispatch(loginSuccess(user));
-                localStorage.setItem('auth', JSON.stringify(user))
-            } else {
-                dispatch(loginFail(userData.message))
+    return new Promise((resolve, reject) => {
+        fetch('api/signIn', {
+                method: 'post',
+                headers: {
+                    "Csrf-Token": Cookies.get('csrfCookie'),
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify(loginData),
             }
-        })
-        .catch(error => console.error(error))
+        )
+            .then(response => response.json())
+            .then((userData) => {
+                const user = userData.data
+                if (userData.status === "success") {
+                    dispatch(loginSuccess(user));
+                    localStorage.setItem('auth', JSON.stringify(user))
+                    resolve(userData)
+                } else {
+                    dispatch(loginFail(userData.message))
+                    reject(userData)
+                }
+            })
+            .catch(error => console.error(error))
+    })
 }
 
 export const logoutInitiate = (token) => dispatch => {

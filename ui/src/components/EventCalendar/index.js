@@ -17,7 +17,7 @@ import moment from "moment";
 
 const {Title, Text} = Typography;
 
-const EventCalendar = ({user, auth, events, singleEvent, getEvents, getOneEvent}) => {
+const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
     const navigate = useNavigate()
     const calendarRef = createRef();
     const [eventList, setEventList] = useState([]);
@@ -25,7 +25,7 @@ const EventCalendar = ({user, auth, events, singleEvent, getEvents, getOneEvent}
 
     useEffect(() => {
         user && getEvents(user?.accessToken);
-    }, [auth.user, getEvents]);
+    }, [user, getEvents]);
 
     useEffect(() => {
         const fEventList = getFormattedEventList(events);

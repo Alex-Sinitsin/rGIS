@@ -21,7 +21,11 @@ const Login = ({loginInitiate, auth, user}) => {
 
     const onFinish = (values) => {
         setLoading(true);
-        loginInitiate(values.email, values.password);
+        loginInitiate(values.email, values.password)
+            .then(_ => {
+                navigate('/')
+            })
+            .catch(_ => { setLoading(false) })
     };
 
     const validateMessages = {

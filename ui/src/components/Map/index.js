@@ -5,11 +5,11 @@ import {connect} from "react-redux";
 import "./map.css";
 import { getItems as getItemsAction} from "../../redux/modules/items";
 
-const MapYandex = ({items, getItems, setSelectedItem}) => {
+const MapYandex = ({user, items, getItems, setSelectedItem}) => {
 
     useEffect(() => {
-        getItems();
-    }, [getItems]);
+        user && getItems();
+    }, [user, getItems]);
 
     let mapState = {center: [56.84, 60.59], zoom: 12, controls: ['fullscreenControl', 'zoomControl']};
     const mapModules = ['control.ZoomControl', 'control.FullscreenControl'];

@@ -95,7 +95,7 @@ const CreateEvent = ({user, createNewEvent}) => {
             </Steps>
             <div className="steps-content">
                 {current === 0 ?
-                    (<MapYandex setSelectedItem={onSelectMapItem}/>)
+                    (<MapYandex setSelectedItem={onSelectMapItem} user={user}/>)
                     : (<></>)}
                 {current === 1 ?
                     (<ChooseEventData onFormFinish={onEventFormFinish} data={eventForm.newEvent}/>)

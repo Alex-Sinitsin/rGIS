@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import "./home.css";
 import {EventCalendar} from "../index";
 
-const Home = ({ user, auth }) => {
+const Home = ({ user }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,11 +13,11 @@ const Home = ({ user, auth }) => {
     }, [navigate, user]);
 
     return (
-        <EventCalendar user={user} auth={auth} />
+        <EventCalendar user={user} />
     );
 };
 
 export default connect(
-    ({auth}) => ({auth}),
+    null,
     null
 )(Home);
