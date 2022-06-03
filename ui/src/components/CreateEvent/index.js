@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Steps, Button, message} from 'antd';
 
 import {MapYandex} from "../index";
@@ -15,6 +15,10 @@ const CreateEvent = ({user, createNewEvent}) => {
     const navigate = useNavigate();
     const [current, setCurrent] = React.useState(0);
     const [eventForm, setEventForm] = React.useState({newEvent: {}});
+
+    useEffect(() => {
+        document.title = "Создание нового мероприятия - Сатурн ГИС";
+    }, [])
 
     const next = () => {
         setCurrent(current + 1);

@@ -17,15 +17,13 @@ const Login = ({loginInitiate, auth, user}) => {
 
     useEffect(() => {
         if(user) navigate('/');
-    },[auth.user, navigate, user]);
+    },[navigate, user]);
 
     const onFinish = (values) => {
         setLoading(true);
         loginInitiate(values.email, values.password)
-            .then(_ => {
-                navigate('/')
-            })
-            .catch(_ => { setLoading(false) })
+            .then(_ => navigate("/"))
+            .catch(_ => setLoading(false))
     };
 
     const validateMessages = {
@@ -55,10 +53,10 @@ const Login = ({loginInitiate, auth, user}) => {
                     name="password"
                     rules={[{ required: true }]}
                 >
-                    <Input
+                    <Input.Password
                         prefix={<LockOutlined className="login-form-item-icon" />}
                         type="password"
-                        placeholder="Password"
+                        placeholder="Пароль"
                     />
                 </Form.Item>
 

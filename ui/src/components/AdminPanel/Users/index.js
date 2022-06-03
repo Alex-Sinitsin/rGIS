@@ -19,6 +19,10 @@ const Users = ({users, getUsers, createUser, changeUserRole}) => {
         getUsers();
     }, [getUsers]);
 
+    useEffect(() => {
+        document.title = "Список пользователей - Сатурн ГИС";
+    }, [])
+
     const showUserModal = () => {
         setUserModalVisible(true);
     };

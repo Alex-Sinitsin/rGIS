@@ -9,7 +9,6 @@ import {
 import {Link, useNavigate} from "react-router-dom";
 import {connect} from "react-redux";
 import {logoutInitiate} from "../../redux/modules/auth";
-import {getItemFromLocalStorage} from "../../redux/utils";
 
 import './customHeader.css';
 
@@ -61,11 +60,6 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
         }
     }, [auth.user, isTokenExp, checkJWT])
 
-    useEffect(() => {
-        const user = getItemFromLocalStorage('auth');
-        if (user) setUser(user);
-    }, [auth.user, setUser]);
-
     return (
         <Header className="header" style={{padding: 0}}>
             <Row className="headerRow">
@@ -90,6 +84,6 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
 };
 
 export default connect(
-    ({ auth }) => ({ auth }),
+    null,
     ({logoutInitiate: logoutInitiate})
 )(CustomHeader);

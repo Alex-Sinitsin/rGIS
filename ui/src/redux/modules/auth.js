@@ -82,11 +82,11 @@ export const loginInitiate = (email, password) => dispatch => {
         )
             .then(response => response.json())
             .then((userData) => {
-                const user = userData.data
+                const user = userData.data;
                 if (userData.status === "success") {
                     dispatch(loginSuccess(user));
                     localStorage.setItem('auth', JSON.stringify(user))
-                    resolve(userData)
+                    resolve(user)
                 } else {
                     dispatch(loginFail(userData.message))
                     reject(userData)
@@ -97,7 +97,7 @@ export const loginInitiate = (email, password) => dispatch => {
 }
 
 export const logoutInitiate = (token) => dispatch => {
-    fetch('api/signOut', {
+    fetch('http://' + window.location.host + '/api/signOut', {
             method: 'get',
             headers: {
                 "Csrf-Token": Cookies.get('csrfCookie'),

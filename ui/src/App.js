@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 
 import {
@@ -25,10 +25,11 @@ import {
 } from "./components"
 import {connect} from "react-redux";
 import moment from "moment";
+import {getItemFromLocalStorage} from "./redux/utils";
 
 const {Sider, Content} = Layout;
 
-function App() {
+function App({auth}) {
     const [user, setUser] = useState(null);
     const [isTokenExpired, setIsTokenExpired] = useState(false);
     const pathnameLocation = window.location.pathname;
@@ -42,6 +43,12 @@ function App() {
             setIsTokenExpired(dateNow > expiration);
         } else return null;
     }
+
+    useEffect(() => {
+        const user = getItemFromLocalStorage('auth');
+        if (user) setUser(user);
+    }, [auth.user]);
+
 
     return (
         <Layout>
@@ -71,7 +78,8 @@ function App() {
                                           }
                                           key='3' mode={'inline'} icon={<DashboardOutlined/>}>
                                 <Menu.Item key="3.1">
-                                    <Link to="/dashboard/items"><AppstoreOutlined style={{marginRight: '10px'}}/>Помещения / объекты</Link>
+                                    <Link to="/dashboard/items"><AppstoreOutlined style={{marginRight: '10px'}}/>Помещения
+                                        / объекты</Link>
                                 </Menu.Item>
                                 <Menu.Item key="3.2">
                                     <Link to="/dashboard/users"><UserSwitchOutlined style={{marginRight: '10px'}}/>Пользователи</Link>
@@ -82,15 +90,16 @@ function App() {
                 </Sider>
             }
             <Layout className="layout" style={{minHeight: '100vh'}}>
-                <Header user={user} setUser={setUser} isTokenExp={isTokenExpired} setIsTokenExp={setIsTokenExpired} checkJWT={checkJwtTokenDate}/>
+                <Header user={user} setUser={setUser} auth={auth} isTokenExp={isTokenExpired}
+                        setIsTokenExp={setIsTokenExpired} checkJWT={checkJwtTokenDate}/>
                 <Content className="mainContent">
                     <Routes>
                         <Route index element={<Home user={user} />}/>
                         <Route path="/login" element={<Login user={user}/>}/>
-                        <Route path="/booking" element={user ? <CreateEvent user={user} /> : <Unauthorized />}/>
-                        <Route path="/dashboard" element={user ? <Dashboard/> : <Unauthorized />}/>
-                        <Route path="/dashboard/users" element={user ? <AdminUsers/> : <Unauthorized />}/>
-                        <Route path="/dashboard/items" element={user ? <AdminItems/> : <Unauthorized />}/>
+                        <Route path="/booking" element={user ? <CreateEvent user={user}/> : <Unauthorized/>}/>
+                        <Route path="/dashboard" element={user ? <Dashboard/> : <Unauthorized/>}/>
+                        <Route path="/dashboard/users" element={user ? <AdminUsers/> : <Unauthorized/>}/>
+                        <Route path="/dashboard/items" element={user ? <AdminItems/> : <Unauthorized/>}/>
                     </Routes>
                 </Content>
             </Layout>
@@ -99,7 +108,7 @@ function App() {
 }
 
 export default connect(
-    null,
+    ({auth}) => ({auth}),
     null
 )(App);
 

@@ -8,7 +8,7 @@ import { getItems as getItemsAction} from "../../redux/modules/items";
 const MapYandex = ({user, items, getItems, setSelectedItem}) => {
 
     useEffect(() => {
-        user && getItems();
+        getItems();
     }, [user, getItems]);
 
     let mapState = {center: [56.84, 60.59], zoom: 12, controls: ['fullscreenControl', 'zoomControl']};

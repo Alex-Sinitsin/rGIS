@@ -12,6 +12,7 @@ const AddUserModal = ({visible, onCancel, onCreate, hideModal}) => {
             centered
             visible={visible}
             confirmLoading={confirmLoading}
+            okText="Добавить"
             onOk={() => {
                 form
                     .validateFields()
