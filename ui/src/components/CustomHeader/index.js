@@ -3,7 +3,7 @@ import {Avatar, Button, Col, Layout, Popover, Row, Typography, message} from "an
 import {
     CaretDownOutlined,
     DashboardOutlined, LoginOutlined,
-    LogoutOutlined,
+    LogoutOutlined, ProfileOutlined,
     UserOutlined
 } from "@ant-design/icons";
 import {Link, useNavigate} from "react-router-dom";
@@ -28,7 +28,8 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
       return (
           <div className='popover-content'>
               {user.userInfo.role === 'Admin' && <Link to="/dashboard"><Button type="ghost"> <DashboardOutlined /> Панель управления</Button></Link>}
-              <Button type="primary" style={{display: 'block', minWidth: '188px', width: '100%', margin: '10px 0 0 0'}} onClick={logoutUser}><LogoutOutlined/> Выйти</Button>
+              <Link to="/profile"><Button type="ghost" style={{display: 'block', minWidth: '188px', width: '100%', margin: '10px 0 0 0', textAlign: 'left', padding: '0 22px'}}><ProfileOutlined /> Профиль</Button></Link>
+              <Button type="primary" style={{display: 'block', minWidth: '188px', width: '100%', margin: '10px 0 0 0'}} onClick={logoutUser}><LogoutOutlined/> Выйти из системы</Button>
           </div>
       )
     }
@@ -47,10 +48,10 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
         });
 
         clearStorage(isTokenExp);
-        user && checkJWT(user.accessToken);
+        user && checkJWT(user?.accessToken);
 
         const checkTokenDateInterval = setInterval(() => {
-            checkJWT(user.accessToken);
+            checkJWT(user?.accessToken);
             clearStorage(isTokenExp);
             message.info('Ваша сессия закнчилась, повторите вход в приложение', 10);
             navigate('/login');

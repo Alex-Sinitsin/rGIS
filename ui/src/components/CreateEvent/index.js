@@ -39,7 +39,7 @@ const CreateEvent = ({user, createNewEvent}) => {
             newEvent: {
                 ...prevState.newEvent,
                 title: values.title,
-                orgUserID: user.userInfo.id,
+                orgUserID: user.id,
                 startDateTime: values.startDateTime.format('YYYY-MM-DD HH:mm').toString(),
                 endDateTime: values.endDateTime.format('YYYY-MM-DD HH:mm').toString(),
                 description: values.description

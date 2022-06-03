@@ -52,8 +52,8 @@ export const createEventFail = (error) => ({
     payload: error
 });
 
-export const getEvents = (token) => dispatch => {
-    fetch('api/events', {
+export const getEvents = (token) => async dispatch => {
+    await fetch('api/events', {
             method: 'get',
             headers: {
                 "Csrf-Token": Cookies.get('csrfCookie'),
@@ -68,8 +68,8 @@ export const getEvents = (token) => dispatch => {
         })
 }
 
-export const getOneEvent = (eventID) => dispatch => {
-    fetch(`api/events/${eventID}`, {
+export const getOneEvent = (eventID) => async dispatch => {
+    await fetch(`api/events/${eventID}`, {
             method: 'get',
             headers: {
                 "Csrf-Token": Cookies.get('csrfCookie'),
@@ -84,8 +84,8 @@ export const getOneEvent = (eventID) => dispatch => {
         })
 }
 
-export const createEvent = (eventData) => dispatch => {
-    return new Promise((resolve, reject) => {
+export const createEvent = (eventData) => async dispatch => {
+    return await new Promise((resolve, reject) => {
         fetch('api/events', {
                 method: 'post',
                 headers: {

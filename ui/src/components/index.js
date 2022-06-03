@@ -7,6 +7,7 @@ import CreateEvent from "./CreateEvent";
 import EventCalendar from "./EventCalendar";
 import EventInfoModal from "./EventInfoModal";
 import Unauthorized from "./UnauthorizedElement";
+import Profile from "./Profile";
 import AdminUsers from "./AdminPanel/Users";
 import AdminItems from "./AdminPanel/Items";
 
@@ -22,4 +23,5 @@ export {
     Unauthorized,
     AdminUsers,
     AdminItems,
+    Profile,
 }

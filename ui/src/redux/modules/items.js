@@ -21,8 +21,8 @@ export const itemsReducer = (state = initialState, {type, payload}) => {
     }
 }
 
-export const getItems = () => dispatch => {
-    fetch('http://' + window.location.host + '/api/items', {
+export const getItems = () => async dispatch => {
+    await fetch('http://' + window.location.host + '/api/items', {
             method: 'get',
             headers: {
                 "Csrf-Token": Cookies.get('csrfCookie'),

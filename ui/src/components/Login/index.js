@@ -19,6 +19,10 @@ const Login = ({loginInitiate, auth, user}) => {
         if(user) navigate('/');
     },[navigate, user]);
 
+    useEffect(() => {
+        document.title = "Авторизация - Сатурн ГИС";
+    }, [])
+
     const onFinish = (values) => {
         setLoading(true);
         loginInitiate(values.email, values.password)
@@ -42,7 +46,7 @@ const Login = ({loginInitiate, auth, user}) => {
                 onFinish={onFinish}
             >
                 <Title className="login-form-title" level={3}>Авторизация</Title>
-                {auth.error && <Alert type="error" message={auth?.error} style={{marginBottom: '15px'}} />}
+                {auth.error && <Alert type="error" message={auth?.error} style={{marginBottom: '15px'}} showIcon />}
                 <Form.Item
                     name="email"
                     rules={[{ type: "email", required: true }]}

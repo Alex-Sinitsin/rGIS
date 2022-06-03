@@ -55,8 +55,8 @@ export const createUserFail = (error) => ({
     payload: error
 });
 
-export const getUsers = () => dispatch => {
-    fetch('http://' + window.location.host + '/api/users', {
+export const getUsers = () => async dispatch => {
+    await fetch('http://' + window.location.host + '/api/users', {
             method: 'get',
             headers: {
                 "Csrf-Token": Cookies.get('csrfCookie'),
@@ -72,8 +72,8 @@ export const getUsers = () => dispatch => {
         .catch(error => console.error(error))
 }
 
-export const createUser = (userData) => dispatch => {
-    return new Promise((resolve, reject) => {
+export const createUser = (userData) => async dispatch => {
+    return await new Promise((resolve, reject) => {
         fetch('http://' + window.location.host + '/api/users', {
                 method: 'post',
                 headers: {
@@ -97,8 +97,8 @@ export const createUser = (userData) => dispatch => {
     })
 }
 
-export const changeUserRole = (userID, role) => dispatch => {
-    return new Promise((resolve, reject) => {
+export const changeUserRole = (userID, role) => async dispatch => {
+    return await new Promise((resolve, reject) => {
         fetch('http://' + window.location.host + '/api/users/' + userID + "/role", {
                 method: 'put',
                 headers: {

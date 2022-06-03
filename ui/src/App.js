@@ -21,7 +21,7 @@ import {
     Dashboard,
     AdminUsers,
     AdminItems,
-    Unauthorized
+    Unauthorized, Profile
 } from "./components"
 import {connect} from "react-redux";
 import moment from "moment";
@@ -60,11 +60,11 @@ function App({auth}) {
                         </Link>
                     </div>
                     <Menu theme="dark" mode="inline">
-                        <Menu.Item className={match.pathname === '/' ? "ant-menu-item-selected" : ""} key="1"
+                        <Menu.Item className={match.pathname === '/' ? "ant-menu-item-selected" : null} key="1"
                                    icon={<HomeOutlined/>}>
                             <Link to="/">Главная</Link>
                         </Menu.Item>
-                        <Menu.Item className={match.pathname === '/booking' ? "ant-menu-item-selected" : ""} key="2"
+                        <Menu.Item className={match.pathname === '/booking' ? "ant-menu-item-selected" : null} key="2"
                                    icon={<AppstoreAddOutlined/>}>
                             <Link to="/booking">Бронирование</Link>
                         </Menu.Item>
@@ -74,7 +74,7 @@ function App({auth}) {
                                               match.pathname === '/dashboard' ||
                                               match.pathname === '/dashboard/users' ||
                                               match.pathname === '/dashboard/items'
-                                                  ? "ant-menu-item-selected" : ""
+                                                  ? "ant-menu-item-selected" : null
                                           }
                                           key='3' mode={'inline'} icon={<DashboardOutlined/>}>
                                 <Menu.Item key="3.1">
@@ -95,11 +95,13 @@ function App({auth}) {
                 <Content className="mainContent">
                     <Routes>
                         <Route index element={<Home user={user} />}/>
-                        <Route path="/login" element={<Login user={user}/>}/>
-                        <Route path="/booking" element={user ? <CreateEvent user={user}/> : <Unauthorized/>}/>
+                        <Route path="/login" element={<Login user={user?.userInfo}/>}/>
+                        <Route path="/booking" element={user ? <CreateEvent user={user?.userInfo}/> : <Unauthorized/>}/>
                         <Route path="/dashboard" element={user ? <Dashboard/> : <Unauthorized/>}/>
+                        <Route path="/profile" element={user ? <Profile user={user?.userInfo} /> : <Unauthorized/>}/>
                         <Route path="/dashboard/users" element={user ? <AdminUsers/> : <Unauthorized/>}/>
                         <Route path="/dashboard/items" element={user ? <AdminItems/> : <Unauthorized/>}/>
+                        <Route path="*" element={<h1>404 Not Found</h1>}/>
                     </Routes>
                 </Content>
             </Layout>

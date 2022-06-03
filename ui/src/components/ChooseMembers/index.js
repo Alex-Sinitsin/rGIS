@@ -9,7 +9,7 @@ const {Text} = Typography;
 
 const ChooseMembers = ({authUser, users, getUsers, onChange}) => {
     let groups = [];
-    const usersWithOutAuthUser = users.filter(el => el.id !== authUser.id)
+    const usersWithOutAuthUser = users.filter(el => el.id !== authUser?.id)
 
     useEffect(() => {
         getUsers();

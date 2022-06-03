@@ -1,0 +1,21 @@
+.profileContainer {
+    height: calc(100vh - 85px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-card .ant-card-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.profile-card .userInfo {
+    margin-left: 25px;
+}
+
+.changePasswordForm {
+    width: 300px;
+}
