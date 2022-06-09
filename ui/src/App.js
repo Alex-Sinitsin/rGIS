@@ -11,7 +11,7 @@ import {
 import {Avatar, Layout, Menu} from 'antd';
 import {
     AppstoreAddOutlined, AppstoreOutlined, DashboardOutlined,
-    HomeOutlined, UserSwitchOutlined,
+    CalendarOutlined, UserSwitchOutlined,
 } from '@ant-design/icons';
 import {
     CustomHeader as Header,
@@ -61,8 +61,8 @@ function App({auth}) {
                     </div>
                     <Menu theme="dark" mode="inline">
                         <Menu.Item className={match.pathname === '/' ? "ant-menu-item-selected" : null} key="1"
-                                   icon={<HomeOutlined/>}>
-                            <Link to="/">Главная</Link>
+                                   icon={<CalendarOutlined/>}>
+                            <Link to="/">Календарь событий</Link>
                         </Menu.Item>
                         <Menu.Item className={match.pathname === '/booking' ? "ant-menu-item-selected" : null} key="2"
                                    icon={<AppstoreAddOutlined/>}>

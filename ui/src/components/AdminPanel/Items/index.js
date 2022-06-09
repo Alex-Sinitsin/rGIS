@@ -20,7 +20,11 @@ const Index = ({ items, getItems }) => {
 
     return (
         <Table dataSource={items} rowKey={record => record.id} title={() => <Title level={2}>Список помещений / объектов</Title>}>
-            <Column title="Название" dataIndex="name" key="name" />
+            <Column
+                title="Название"
+                dataIndex="name"
+                key="name"
+            />
             <Column
                 title="Адрес"
                 dataIndex="address"
