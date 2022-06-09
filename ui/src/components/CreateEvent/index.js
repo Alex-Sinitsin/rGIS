@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Steps, Button, message} from 'antd';
+import {Steps, Button, message, Typography} from 'antd';
 
 import {MapYandex} from "../index";
 import ChooseEventData from "../ChooseEventData";
@@ -10,10 +10,12 @@ import {createEvent as createEventAction} from "../../redux/modules/events";
 import {useNavigate} from "react-router-dom";
 
 const {Step} = Steps;
+const {Text} = Typography;
 
 const CreateEvent = ({user, createNewEvent}) => {
     const navigate = useNavigate();
     const [current, setCurrent] = React.useState(0);
+    const [selMapItem, setSelMapItem] = React.useState(null);
     const [eventForm, setEventForm] = React.useState({newEvent: {}});
 
     useEffect(() => {
@@ -49,6 +51,7 @@ const CreateEvent = ({user, createNewEvent}) => {
     }
 
     const onSelectMapItem = (item) => {
+        setSelMapItem(item);
         setEventForm(prevState => ({
             newEvent: {
                 ...prevState.newEvent,
@@ -99,7 +102,10 @@ const CreateEvent = ({user, createNewEvent}) => {
             </Steps>
             <div className="steps-content">
                 {current === 0 ?
-                    (<MapYandex setSelectedItem={onSelectMapItem} user={user}/>)
+                    (<>
+                        <p><Text strong>Выбранное помещение: </Text><Text>{selMapItem ? selMapItem.name : "Помещение не выбрано"}</Text></p>
+                        <MapYandex setSelectedItem={onSelectMapItem} user={user}/>
+                    </>)
                     : (<></>)}
                 {current === 1 ?
                     (<ChooseEventData onFormFinish={onEventFormFinish} data={eventForm.newEvent}/>)
