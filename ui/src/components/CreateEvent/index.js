@@ -32,7 +32,7 @@ const CreateEvent = ({user, createNewEvent}) => {
 
     const nextButtonClick = () => {
         if (current === 0 && eventForm.newEvent?.itemID === undefined) {
-            message.warn('Пожалуйста выберите объект, которое хотите забронировать!');
+            message.warn('Пожалуйста выберите помещение, которое хотите забронировать!');
         } else next();
     }
 
@@ -111,7 +111,7 @@ const CreateEvent = ({user, createNewEvent}) => {
                     (<ChooseEventData onFormFinish={onEventFormFinish} data={eventForm.newEvent}/>)
                     : (<></>)}
                 {current === 2 ?
-                    (<ChooseMembers authUser={user?.userInfo} onChange={onMembersChange}/>)
+                    (<ChooseMembers authUser={user} onChange={onMembersChange}/>)
                     : (<></>)}
             </div>
             <div className="steps-action">

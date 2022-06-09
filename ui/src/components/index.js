@@ -8,6 +8,7 @@ import EventCalendar from "./EventCalendar";
 import EventInfoModal from "./EventInfoModal";
 import Unauthorized from "./UnauthorizedElement";
 import Profile from "./Profile";
+import ChangePasswordForm from "./Profile/forms/ChangePasswordForm";
 import AdminUsers from "./AdminPanel/Users";
 import AdminItems from "./AdminPanel/Items";
 
@@ -24,4 +25,5 @@ export {
     AdminUsers,
     AdminItems,
     Profile,
+    ChangePasswordForm,
 }

@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Avatar, Button, Col, Layout, Popover, Row, Typography, notification} from "antd";
+import React from 'react';
+import {Avatar, Button, Col, Layout, Popover, Row, Typography} from "antd";
 import {
     CaretDownOutlined,
     DashboardOutlined, LoginOutlined,
@@ -15,7 +15,7 @@ import './customHeader.css';
 const { Header } = Layout;
 const { Text } = Typography;
 
-const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenExp, setIsTokenExp }) => {
+const CustomHeader = ({ logoutInitiate, user, setUser}) => {
     const navigate = useNavigate();
 
     const logoutUser = () => {
@@ -33,29 +33,6 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
           </div>
       )
     }
-    const clearStorage = (isTokenExp) => {
-        if (isTokenExp) {
-            localStorage.removeItem("auth");
-            setUser(null);
-            setIsTokenExp(false);
-        } else {}
-    }
-
-    useEffect(() => {
-
-        clearStorage(isTokenExp);
-        user && checkJWT(user?.accessToken);
-
-        const checkTokenDateInterval = setInterval(() => {
-            checkJWT(user?.accessToken);
-            clearStorage(isTokenExp);
-            notification.info({message: 'Ваша сессия закончилась', description: 'Повторите вход в приложение', duration: 0, placement: 'top'});
-            navigate('/login');
-        }, 10800000)
-        return () => {
-            clearInterval(checkTokenDateInterval);
-        }
-    }, [auth.user, isTokenExp, checkJWT])
 
     return (
         <Header className="header" style={{padding: 0}}>

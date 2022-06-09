@@ -1,17 +1,18 @@
 import React from 'react';
-import {Avatar, Modal, Tag, Typography} from "antd";
+import {Avatar, Button, Modal, Popconfirm, Tag, Typography} from "antd";
 
 import "./eventInfoModal.css";
 import moment from "moment";
 import "moment/locale/ru"
-import {ArrowRightOutlined, UserOutlined} from "@ant-design/icons";
+import {ArrowRightOutlined, DeleteOutlined, EditOutlined, UserOutlined} from "@ant-design/icons";
 
 const {Text, Title} = Typography;
 
-const EventInfoModal = ({modalVisible, setModalVisible, eventInfo}) => {
+const EventInfoModal = ({modalVisible, setModalVisible, eventInfo, deleteEvent}) => {
     return (
         <Modal
             title="Информация о событии"
+            className="eventInfoModal"
             centered
             visible={modalVisible}
             onOk={() => setModalVisible(false)}
@@ -20,6 +21,18 @@ const EventInfoModal = ({modalVisible, setModalVisible, eventInfo}) => {
             cancelButtonProps={{ hidden: true }}
         >
             <Title level={3}>{eventInfo?.event?.title}</Title>
+            <div className="modalButtonGroup">
+                <Button style={{marginRight: '8px'}} title="Редактирвоать событие"><EditOutlined /></Button>
+                <Popconfirm
+                    placement="bottomRight"
+                    title="Вы уверены, что хотите удалить событие?"
+                    onConfirm={() => {}}
+                    okText="Да"
+                    cancelText="Нет"
+                >
+                    <Button type="ghost" danger title="Удалить событие"><DeleteOutlined /></Button>
+                </Popconfirm>
+            </div>
             <Text strong>Место встречи: </Text>
             <div className="companyInfo">
                 <Title level={4} className="companyName">{eventInfo?.item?.name}</Title>
@@ -67,7 +80,7 @@ const EventInfoModal = ({modalVisible, setModalVisible, eventInfo}) => {
                     </div>
                 </>
             }
-            <Text strong style={{display: 'block', marginTop: '5px'}}>Описание: </Text>
+            {eventInfo?.event?.description && <Text strong style={{display: 'block', marginTop: '5px'}}>Описание: </Text>}
             <div className="description">{eventInfo?.event?.description}</div>
         </Modal>
     );

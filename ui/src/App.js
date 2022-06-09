@@ -6,9 +6,10 @@ import {
     Route,
     Link,
     useMatch,
+    useNavigate,
 } from "react-router-dom";
 
-import {Avatar, Layout, Menu} from 'antd';
+import {Avatar, Layout, Menu, notification} from 'antd';
 import {
     AppstoreAddOutlined, AppstoreOutlined, DashboardOutlined,
     CalendarOutlined, UserSwitchOutlined,
@@ -26,14 +27,21 @@ import {
 import {connect} from "react-redux";
 import moment from "moment";
 import {getItemFromLocalStorage} from "./redux/utils";
+import {logoutInitiate} from "./redux/modules/auth";
 
 const {Sider, Content} = Layout;
 
 function App({auth}) {
+    const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [isTokenExpired, setIsTokenExpired] = useState(false);
     const pathnameLocation = window.location.pathname;
     const match = useMatch({path: pathnameLocation, end: true});
+
+    useEffect(() => {
+        const user = getItemFromLocalStorage('auth');
+        if (user) setUser(user);
+    }, [auth.user]);
 
     const checkJwtTokenDate = (token) => {
         if (token) {
@@ -44,10 +52,29 @@ function App({auth}) {
         } else return null;
     }
 
+    const checkTokenValid = (token) => {
+        checkJwtTokenDate(token);
+        if (isTokenExpired) {
+            clearStorage();
+            notification.info({message: 'Ваша сессия закончилась', description: 'Повторите вход в приложение', duration: 0, placement: 'top'});
+            navigate('/login');
+        }
+    }
+
+    const clearStorage = () => {
+        localStorage.removeItem("auth");
+        setUser(null);
+        setIsTokenExpired(false);
+    }
+
     useEffect(() => {
-        const user = getItemFromLocalStorage('auth');
-        if (user) setUser(user);
-    }, [auth.user]);
+        const checkTokenDateInterval = setInterval(() => {
+            checkTokenValid(user?.accessToken)
+        }, 3600000)
+        return () => {
+            clearInterval(checkTokenDateInterval);
+        }
+    }, [])
 
 
     return (
@@ -90,15 +117,14 @@ function App({auth}) {
                 </Sider>
             }
             <Layout className="layout" style={{minHeight: '100vh'}}>
-                <Header user={user} setUser={setUser} auth={auth} isTokenExp={isTokenExpired}
-                        setIsTokenExp={setIsTokenExpired} checkJWT={checkJwtTokenDate}/>
+                <Header user={user} setUser={setUser} />
                 <Content className="mainContent">
                     <Routes>
-                        <Route index element={<Home user={user} />}/>
+                        <Route index element={<Home user={user}/>}/>
                         <Route path="/login" element={<Login user={user?.userInfo}/>}/>
                         <Route path="/booking" element={user ? <CreateEvent user={user?.userInfo}/> : <Unauthorized/>}/>
                         <Route path="/dashboard" element={user ? <Dashboard/> : <Unauthorized/>}/>
-                        <Route path="/profile" element={user ? <Profile user={user?.userInfo} /> : <Unauthorized/>}/>
+                        <Route path="/profile" element={user ? <Profile user={user?.userInfo}/> : <Unauthorized/>}/>
                         <Route path="/dashboard/users" element={user ? <AdminUsers/> : <Unauthorized/>}/>
                         <Route path="/dashboard/items" element={user ? <AdminItems/> : <Unauthorized/>}/>
                         <Route path="*" element={<h1>404 Not Found</h1>}/>
@@ -111,6 +137,6 @@ function App({auth}) {
 
 export default connect(
     ({auth}) => ({auth}),
-    null
+    ({logoutInitiate: logoutInitiate})
 )(App);
 

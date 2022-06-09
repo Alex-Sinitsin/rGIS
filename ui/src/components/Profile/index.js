@@ -1,23 +1,47 @@
 import React, {useEffect, useState} from 'react';
 
 import "./profile.css";
-import {Avatar, Button, Card, Col, Divider, Form, Input, Row, Typography} from "antd";
-import {SaveOutlined, UserOutlined} from "@ant-design/icons";
+import {Avatar, Card, Col, Divider, Form, message, Row, Typography} from "antd";
+import {changeUserPassword as changeUserPasswordAction} from "../../redux/modules/users";
+import {UserOutlined} from "@ant-design/icons";
+import {ChangePasswordForm} from "../index";
+import {connect} from "react-redux";
 
 const {Text} = Typography;
 
-const Profile = ({user}) => {
+const Profile = ({user, changeUserPassword}) => {
 
     const {name, lastName, position, email, role} = user ? user : null;
+    const [errorMessage, setErrorMessage] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [changePasswordForm] = Form.useForm();
 
     useEffect(() => {
         document.title = "Профиль пользователя - Сатурн ГИС";
     }, []);
-
-    useEffect(() => {
-        console.log(user)
-    }, [user]);
+    
+    const changePassword = (values) => {
+        message.config({
+            top: 70,
+            duration: 5,
+            maxCount: 3,
+        });
+        setLoading(true)
+        changeUserPassword(values)
+            .then(res => {
+                if (res.status === "success") {
+                    setErrorMessage(null);
+                    setTimeout(() => {
+                        message.success(res.message);
+                        setLoading(false);
+                        changePasswordForm.resetFields();
+                    }, 500)
+                }
+            })
+            .catch(error => {
+                setTimeout(() => {setLoading(false); setErrorMessage(error.message);}, 500)
+            })
+    }
 
     return (
         <>
@@ -45,66 +69,12 @@ const Profile = ({user}) => {
                             </div>
                         </div>
                         <Divider />
-                        <Form layout="vertical" className="changePasswordForm">
-                            <Text strong style={{display: 'block', fontSize: '16px', color: '#009892', marginBottom: '15px'}}>Измененить пароль</Text>
-                            <Form.Item
-                                name="currentPassword"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Введите текущий пароль!',
-                                    },
-                                ]}
-                                hasFeedback
-                            >
-                                <Input.Password placeholder="Текущий пароль" />
-                            </Form.Item>
-                            <Form.Item
-                                name="newPassword"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Введите новый пароль!',
-                                    },
-                                ]}
-                                hasFeedback
-                            >
-                                <Input.Password placeholder="Новый пароль" />
-                            </Form.Item>
-                            <Form.Item
-                                name="confirmPassword"
-                                dependencies={['password']}
-                                hasFeedback
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Подтвердите пароль!',
-                                    },
-                                    ({ getFieldValue }) => ({
-                                        validator(_, value) {
-                                            if (!value || getFieldValue('newPassword') === value) {
-                                                return Promise.resolve();
-                                            }
-                                            return Promise.reject(new Error('Введенные пароли не совпадают!'));
-                                        },
-                                    }),
-                                ]}
-                            >
-                                <Input.Password placeholder="Подтверждение пароля"/>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    className="change-password-button"
-                                    loading={loading}
-                                    icon={<SaveOutlined />}
-                                    style={{width: '100%'}}
-                                >
-                                    Сохранить
-                                </Button>
-                            </Form.Item>
-                        </Form>
+                        <ChangePasswordForm
+                            form={changePasswordForm}
+                            errorMessage={errorMessage}
+                            changePassword={changePassword}
+                            loading={loading}
+                        />
                     </Card>
                 </Col>
             </Row>
@@ -112,4 +82,7 @@ const Profile = ({user}) => {
     );
 };
 
-export default Profile;
+export default connect(
+    null,
+    ({changeUserPassword: changeUserPasswordAction})
+)(Profile);

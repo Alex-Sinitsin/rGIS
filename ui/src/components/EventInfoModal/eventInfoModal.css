@@ -17,6 +17,17 @@
     margin-left: 8px;
 }
 
+.eventInfoModal .ant-modal-body {
+    position: relative;
+}
+
+.modalButtonGroup {
+    display: inline-block;
+    position: absolute;
+    top: 25px;
+    right: 15px;
+}
+
 .companyInfo .companyAddress {
     display: block;
 }
