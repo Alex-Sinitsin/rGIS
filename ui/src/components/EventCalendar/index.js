@@ -73,6 +73,10 @@ const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
         singleEvent && singleEvent?.event?.id === info.event.extendedProps.eventID ? setModalVisible(true) : setTimeout(() => setModalVisible(true), 300)
     }
 
+    const deleteEvent = (eventID) => {
+        console.log(eventID);
+    }
+
     return (
         <>
             <Row>
@@ -118,6 +122,7 @@ const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
                 </Col>
             </Row>
             {singleEvent && <EventInfoModal
+                deleteEvent={deleteEvent}
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 eventInfo={singleEvent}

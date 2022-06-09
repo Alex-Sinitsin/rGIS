@@ -26,7 +26,7 @@ const EventInfoModal = ({modalVisible, setModalVisible, eventInfo, deleteEvent})
                 <Popconfirm
                     placement="bottomRight"
                     title="Вы уверены, что хотите удалить событие?"
-                    onConfirm={() => {}}
+                    onConfirm={() => deleteEvent(eventInfo?.event?.id)}
                     okText="Да"
                     cancelText="Нет"
                 >
