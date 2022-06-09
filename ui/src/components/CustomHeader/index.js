@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Avatar, Button, Col, Layout, Popover, Row, Typography, message} from "antd";
+import {Avatar, Button, Col, Layout, Popover, Row, Typography, notification} from "antd";
 import {
     CaretDownOutlined,
     DashboardOutlined, LoginOutlined,
@@ -33,7 +33,6 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
           </div>
       )
     }
-
     const clearStorage = (isTokenExp) => {
         if (isTokenExp) {
             localStorage.removeItem("auth");
@@ -43,9 +42,6 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
     }
 
     useEffect(() => {
-        message.config({
-            top: 70
-        });
 
         clearStorage(isTokenExp);
         user && checkJWT(user?.accessToken);
@@ -53,7 +49,7 @@ const CustomHeader = ({ logoutInitiate, auth, user, setUser, checkJWT, isTokenEx
         const checkTokenDateInterval = setInterval(() => {
             checkJWT(user?.accessToken);
             clearStorage(isTokenExp);
-            message.info('Ваша сессия закнчилась, повторите вход в приложение', 10);
+            notification.info({message: 'Ваша сессия закончилась', description: 'Повторите вход в приложение', duration: 0, placement: 'top'});
             navigate('/login');
         }, 10800000)
         return () => {
