@@ -8,6 +8,7 @@ import ChooseMembers from "../ChooseMembers";
 import {connect} from "react-redux";
 import {createEvent as createEventAction} from "../../redux/modules/events";
 import {useNavigate} from "react-router-dom";
+import {useForm} from "antd/lib/form/Form";
 
 const {Step} = Steps;
 const {Text} = Typography;
@@ -17,10 +18,15 @@ const CreateEvent = ({user, createNewEvent}) => {
     const [current, setCurrent] = React.useState(0);
     const [selMapItem, setSelMapItem] = React.useState(null);
     const [eventForm, setEventForm] = React.useState({newEvent: {}});
+    const [form] = useForm();
 
     useEffect(() => {
         document.title = "Создание нового мероприятия - Сатурн ГИС";
     }, [])
+
+    useEffect(() => {
+        console.log(eventForm)
+    }, [eventForm]);
 
     const next = () => {
         setCurrent(current + 1);
@@ -34,6 +40,16 @@ const CreateEvent = ({user, createNewEvent}) => {
         if (current === 0 && eventForm.newEvent?.itemID === undefined) {
             message.warn('Пожалуйста выберите помещение, которое хотите забронировать!');
         } else next();
+
+        if(current === 1) {
+            form
+                .validateFields()
+                .then((values) => {
+                    onEventFormFinish(values)
+                    form.resetFields();
+                })
+                .catch(_ => null)
+        }
     }
 
     const onEventFormFinish = (values) => {
@@ -108,10 +124,10 @@ const CreateEvent = ({user, createNewEvent}) => {
                     </>)
                     : (<></>)}
                 {current === 1 ?
-                    (<ChooseEventData onFormFinish={onEventFormFinish} data={eventForm.newEvent}/>)
+                    (<ChooseEventData form={form} onFormFinish={onEventFormFinish} data={eventForm.newEvent}/>)
                     : (<></>)}
                 {current === 2 ?
-                    (<ChooseMembers authUser={user} onChange={onMembersChange}/>)
+                    (<ChooseMembers authUser={user} onChange={onMembersChange} selectMode="multiple"/>)
                     : (<></>)}
             </div>
             <div className="steps-action">
@@ -120,7 +136,7 @@ const CreateEvent = ({user, createNewEvent}) => {
                         Назад
                     </Button>
                 )}
-                {current < steps.length - 1 && current !== 1 && (
+                {current < steps.length - 1 && (
                     <Button type="primary" onClick={nextButtonClick}>
                         Далее
                     </Button>

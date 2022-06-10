@@ -1,8 +1,8 @@
 import React, {createRef, useEffect, useState} from 'react';
 import {connect} from "react-redux";
-import {getEvents as getEventsAction, getOneEvent as getOneEventAction} from "../../redux/modules/events";
+import {getEvents as getEventsAction, getOneEvent as getOneEventAction, deleteEvent as deleteEventAction} from "../../redux/modules/events";
 import {useNavigate} from "react-router-dom";
-import {Col, Row, Typography} from "antd";
+import {Col, message, Row, Typography} from "antd";
 import {UnorderedListOutlined} from "@ant-design/icons";
 
 import FullCalendar from '@fullcalendar/react'
@@ -17,7 +17,7 @@ import moment from "moment";
 
 const {Title, Text} = Typography;
 
-const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
+const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent, deleteEvent}) => {
     const navigate = useNavigate()
     const calendarRef = createRef();
     const [eventList, setEventList] = useState([]);
@@ -25,7 +25,7 @@ const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
 
     useEffect(() => {
         user && getEvents(user?.accessToken);
-    }, [user, getEvents]);
+    }, [getEvents]);
 
     useEffect(() => {
         const fEventList = getFormattedEventList(events);
@@ -73,9 +73,20 @@ const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
         singleEvent && singleEvent?.event?.id === info.event.extendedProps.eventID ? setModalVisible(true) : setTimeout(() => setModalVisible(true), 300)
     }
 
-    const deleteEvent = (eventID) => {
-        console.log(eventID);
+    const handleDeleteEvent = (eventID) => {
+        deleteEvent(eventID)
+            .then(res => {
+                if (res.status === "success") {
+                    message.success(res.message, 5);
+                    setModalVisible(false);
+                }
+            })
+            .catch(error => {
+                message.error(error.message, 5)
+            });
     }
+
+
 
     return (
         <>
@@ -122,7 +133,8 @@ const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
                 </Col>
             </Row>
             {singleEvent && <EventInfoModal
-                deleteEvent={deleteEvent}
+                user={user?.userInfo}
+                deleteEvent={handleDeleteEvent}
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 eventInfo={singleEvent}
@@ -133,5 +145,5 @@ const EventCalendar = ({user, events, singleEvent, getEvents, getOneEvent}) => {
 
 export default connect(
     ({events, singleEvent}) => ({events: events.events, singleEvent: events.singleEvent}),
-    ({getEvents: getEventsAction, getOneEvent: getOneEventAction})
+    ({getEvents: getEventsAction, getOneEvent: getOneEventAction, deleteEvent: deleteEventAction})
 )(EventCalendar)

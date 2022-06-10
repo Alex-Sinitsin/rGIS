@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import "./home.css";
 import {EventCalendar} from "../index";
 
-const Home = ({ user}) => {
+const Home = ({ user }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,7 +14,6 @@ const Home = ({ user}) => {
 
     useEffect(() => {
         document.title = "Список мероприятий - Сатурн ГИС";
-        if (!user) navigate(0);
     }, []);
 
 

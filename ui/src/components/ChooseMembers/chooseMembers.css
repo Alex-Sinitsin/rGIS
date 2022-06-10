@@ -3,3 +3,10 @@
     max-width: 500px;
     margin: 10px auto;
 }
+
+.chooseMembersLabel,
+.chooseMembersSelect {
+    display: block;
+    width: 80%;
+    margin: 10px auto 0;
+}

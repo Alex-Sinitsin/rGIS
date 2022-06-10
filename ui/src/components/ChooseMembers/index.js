@@ -7,7 +7,7 @@ import "./chooseMembers.css";
 const {Option, OptGroup} = Select;
 const {Text} = Typography;
 
-const ChooseMembers = ({authUser, users, getUsers, onChange}) => {
+const ChooseMembers = ({authUser, users, getUsers, onChange, selectMode, data}) => {
     let groups = [];
     const usersWithOutAuthUser = users.filter(el => el.id !== authUser?.id)
 
@@ -37,12 +37,12 @@ const ChooseMembers = ({authUser, users, getUsers, onChange}) => {
 
     return (
         <div style={{ width: '100%' }}>
-            <Text style={{display: 'block', width: '80%', margin: '10px auto 0'}}>Участники события:</Text>
+            <Text className="chooseMembersLabel">Участники события:</Text>
             <Select
-                mode="multiple"
+                className="chooseMembersSelect"
+                mode={selectMode}
                 allowClear={true}
-                style={{display: 'block', width: '80%', margin: '10px auto 0'}}
-                defaultValue={[]}
+                defaultValue={data && data.length > 0 ? data : []}
                 placeholder="Выберите участника"
                 onChange={handleChange}
             >

@@ -40,8 +40,10 @@ function App({auth}) {
 
     useEffect(() => {
         const user = getItemFromLocalStorage('auth');
-        if (user) setUser(user);
-    }, [auth.user]);
+        if (user) {
+            setUser(user);
+        }
+    }, [auth.user])
 
     const checkJwtTokenDate = (token) => {
         if (token) {
@@ -68,6 +70,7 @@ function App({auth}) {
     }
 
     useEffect(() => {
+        checkTokenValid(user?.accessToken);
         const checkTokenDateInterval = setInterval(() => {
             checkTokenValid(user?.accessToken)
         }, 3600000)
@@ -121,7 +124,7 @@ function App({auth}) {
                 <Content className="mainContent">
                     <Routes>
                         <Route index element={<Home user={user}/>}/>
-                        <Route path="/login" element={<Login user={user?.userInfo}/>}/>
+                        <Route path="/login" element={<Login user={user?.userInfo} setUser={setUser}/>}/>
                         <Route path="/booking" element={user ? <CreateEvent user={user?.userInfo}/> : <Unauthorized/>}/>
                         <Route path="/dashboard" element={user ? <Dashboard/> : <Unauthorized/>}/>
                         <Route path="/profile" element={user ? <Profile user={user?.userInfo}/> : <Unauthorized/>}/>

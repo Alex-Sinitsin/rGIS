@@ -1,0 +1,18 @@
+.yandexMapInModal .yandexMap,
+.yandexMapInModal .yandexMap .map {
+    min-height: 350px;
+    max-width: 100%;
+}
+
+.eventEditModal .eventForm {
+    max-width: 100%;
+}
+
+.eventEditModal .chooseMembersLabel,
+.eventEditModal .chooseMembersSelect {
+    width: 100%;
+}
+
+.eventEditModal .membersForm {
+    max-width: 100%;
+}

@@ -27,7 +27,7 @@ const CustomHeader = ({ logoutInitiate, user, setUser}) => {
     const content = () => {
       return (
           <div className='popover-content'>
-              {user.userInfo.role === 'Admin' && <Link to="/dashboard"><Button type="ghost"> <DashboardOutlined /> Панель управления</Button></Link>}
+              {user?.userInfo?.role === 'Admin' && <Link to="/dashboard"><Button type="ghost"> <DashboardOutlined /> Панель управления</Button></Link>}
               <Link to="/profile"><Button type="ghost" style={{display: 'block', minWidth: '188px', width: '100%', margin: '10px 0 0 0', textAlign: 'left', padding: '0 22px'}}><ProfileOutlined /> Профиль</Button></Link>
               <Button type="primary" style={{display: 'block', minWidth: '188px', width: '100%', margin: '10px 0 0 0'}} onClick={logoutUser}><LogoutOutlined/> Выйти из системы</Button>
           </div>

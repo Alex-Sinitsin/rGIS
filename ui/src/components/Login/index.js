@@ -1,23 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {Form, Input, Button, Alert} from 'antd';
 import {connect} from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 import {MailOutlined, LockOutlined, LoginOutlined} from '@ant-design/icons';
 import {loginInitiate} from "../../redux/modules/auth";
 
 import "./login.css";
 import Title from "antd/es/typography/Title";
+import {getItemFromLocalStorage} from "../../redux/utils";
 
 
-const Login = ({loginInitiate, auth, user}) => {
+const Login = ({loginInitiate, auth, user, setUser}) => {
 
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if(user) navigate('/');
-    },[navigate, user]);
+        if (user) navigate('/');
+    }, [navigate, user]);
 
     useEffect(() => {
         document.title = "Авторизация - Сатурн ГИС";
@@ -26,7 +27,13 @@ const Login = ({loginInitiate, auth, user}) => {
     const onFinish = (values) => {
         setLoading(true);
         loginInitiate(values.email, values.password)
-            .then(_ => navigate("/"))
+            .then(_ => {
+                const user = getItemFromLocalStorage('auth');
+                if (user) {
+                    setUser(user);
+                    navigate("/");
+                }
+            })
             .catch(_ => setLoading(false))
     };
 
@@ -46,26 +53,27 @@ const Login = ({loginInitiate, auth, user}) => {
                 onFinish={onFinish}
             >
                 <Title className="login-form-title" level={3}>Авторизация</Title>
-                {auth.error && <Alert type="error" message={auth?.error} style={{marginBottom: '15px'}} showIcon />}
+                {auth.error && <Alert type="error" message={auth?.error} style={{marginBottom: '15px'}} showIcon/>}
                 <Form.Item
                     name="email"
-                    rules={[{ type: "email", required: true }]}
+                    rules={[{type: "email", required: true}]}
                 >
-                    <Input prefix={<MailOutlined className="login-form-item-icon" />} placeholder="Email" />
+                    <Input prefix={<MailOutlined className="login-form-item-icon"/>} placeholder="Email"/>
                 </Form.Item>
                 <Form.Item
                     name="password"
-                    rules={[{ required: true }]}
+                    rules={[{required: true}]}
                 >
                     <Input.Password
-                        prefix={<LockOutlined className="login-form-item-icon" />}
+                        prefix={<LockOutlined className="login-form-item-icon"/>}
                         type="password"
                         placeholder="Пароль"
                     />
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button" loading={loading} icon={<LoginOutlined />}>
+                    <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}
+                            icon={<LoginOutlined/>}>
                         Войти
                     </Button>
                 </Form.Item>
@@ -75,6 +83,6 @@ const Login = ({loginInitiate, auth, user}) => {
 };
 
 export default connect(
-    ({ auth }) => ({ auth }),
+    ({auth}) => ({auth}),
     ({loginInitiate: loginInitiate})
 )(Login);

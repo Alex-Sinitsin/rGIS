@@ -5,6 +5,7 @@ import CustomHeader from "./CustomHeader";
 import MapYandex from "./Map";
 import CreateEvent from "./CreateEvent";
 import EventCalendar from "./EventCalendar";
+import EditEventForm from "./EventCalendar/subcomponents/EditEventForm";
 import EventInfoModal from "./EventInfoModal";
 import Unauthorized from "./UnauthorizedElement";
 import Profile from "./Profile";
@@ -20,6 +21,7 @@ export {
     CustomHeader,
     MapYandex,
     EventCalendar,
+    EditEventForm,
     EventInfoModal,
     Unauthorized,
     AdminUsers,
