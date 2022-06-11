@@ -1,3 +1,7 @@
+.eventTitle {
+    max-width: 80%;
+}
+
 .companyInfo {
     position: relative;
     width: 100%;

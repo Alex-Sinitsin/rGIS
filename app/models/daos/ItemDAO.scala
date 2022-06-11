@@ -18,7 +18,7 @@ class ItemDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
    * @return Список объектов
    */
   def getAll: Future[List[Item]] = {
-    db.run(items.result.map(_.toList))
+    db.run(items.sortBy(_.name.asc).result.map(_.toList))
   }
 
   /**

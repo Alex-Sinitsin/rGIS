@@ -18,7 +18,7 @@ const Login = ({loginInitiate, auth, user, setUser}) => {
 
     useEffect(() => {
         if (user) navigate('/');
-    }, [navigate, user]);
+    }, []);
 
     useEffect(() => {
         document.title = "Авторизация - Сатурн ГИС";

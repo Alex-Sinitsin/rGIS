@@ -31,7 +31,7 @@ import {logoutInitiate} from "./redux/modules/auth";
 
 const {Sider, Content} = Layout;
 
-function App({auth}) {
+function App({auth, logoutInitiate}) {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [isTokenExpired, setIsTokenExpired] = useState(false);
@@ -57,16 +57,12 @@ function App({auth}) {
     const checkTokenValid = (token) => {
         checkJwtTokenDate(token);
         if (isTokenExpired) {
-            clearStorage();
+            logoutInitiate(user?.accessToken);
+            setUser(null);
+            setIsTokenExpired(false);
             notification.info({message: 'Ваша сессия закончилась', description: 'Повторите вход в приложение', duration: 0, placement: 'top'});
             navigate('/login');
         }
-    }
-
-    const clearStorage = () => {
-        localStorage.removeItem("auth");
-        setUser(null);
-        setIsTokenExpired(false);
     }
 
     useEffect(() => {

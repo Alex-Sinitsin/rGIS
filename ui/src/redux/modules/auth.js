@@ -109,6 +109,9 @@ export const logoutInitiate = (token) => dispatch => {
             if (response.ok) {
                 localStorage.removeItem("auth");
                 dispatch(LogOutSuccess);
+            } else if(response.status === 401) {
+                localStorage.removeItem("auth");
+                dispatch(LogOutSuccess);
             }
         })
         .catch(error => console.error(error))

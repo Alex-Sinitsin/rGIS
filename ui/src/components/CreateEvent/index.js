@@ -24,10 +24,6 @@ const CreateEvent = ({user, createNewEvent}) => {
         document.title = "Создание нового мероприятия - Сатурн ГИС";
     }, [])
 
-    useEffect(() => {
-        console.log(eventForm)
-    }, [eventForm]);
-
     const next = () => {
         setCurrent(current + 1);
     };

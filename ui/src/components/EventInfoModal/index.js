@@ -8,7 +8,7 @@ import {ArrowRightOutlined, DeleteOutlined, EditOutlined, UserOutlined} from "@a
 import {EditEventForm} from "../index";
 import {connect} from "react-redux";
 import {getUsers as getUsersAction} from "../../redux/modules/users";
-import {updateEvent as updateEventAction} from "../../redux/modules/events";
+import {updateEvent as updateEventAction, deleteEvent as deleteEventAction} from "../../redux/modules/events";
 import {useForm} from "antd/es/form/Form";
 
 const {Text, Title} = Typography;
@@ -33,18 +33,31 @@ const EventInfoModal = ({
         getUsers();
     }, [getUsers]);
 
-    //TODO Переписать автозаполнение данных
+    const handleEdit = () => {
+      setIsEventEditing(true);
+      setEventFormData(prevState => ({
+          newEventData: {
+              ...prevState.newEventData,
+              title: eventInfo.event.title,
+              orgUserID: eventInfo.orgUser.id,
+              startDateTime: moment(eventInfo.event.startDateTime).format('YYYY-MM-DD HH:mm').toString(),
+              endDateTime: moment(eventInfo.event.endDateTime).format('YYYY-MM-DD HH:mm').toString(),
+              description: eventInfo.event.description,
+              itemID: eventInfo.item.id,
+              members: eventInfo.members.map(member => member.id)
+          }
+      }))
+    }
+
     const onEventFormChange = (fields) => {
         setEventFormData(prevState => ({
             newEventData: {
                 ...prevState.newEventData,
                 title: fields[1].value,
                 orgUserID: user.id === eventInfo.orgUser.id ? user.id : eventInfo.orgUser.id,
-                itemID: eventInfo.item.id,
                 startDateTime: fields[2].value.format('YYYY-MM-DD HH:mm').toString(),
                 endDateTime: fields[3].value.format('YYYY-MM-DD HH:mm').toString(),
-                description: fields[4].value,
-                members: eventInfo.members.map(member => member.id)
+                description: fields[4].value
             }
         }));
     }
@@ -54,13 +67,7 @@ const EventInfoModal = ({
         setEventFormData(prevState => ({
             newEventData: {
                 ...prevState.newEventData,
-                title: !eventFormData.newEventData.title && eventInfo.event.title,
-                orgUserID: !eventFormData.newEventData.orgUserId &&  eventInfo.orgUser.id,
-                startDateTime: !eventFormData.newEventData.startDateTime && moment(eventInfo.event.startDateTime).format('YYYY-MM-DD HH:mm').toString(),
-                endDateTime: !eventFormData.newEventData.endDateTime && moment(eventInfo.event.endDateTime).format('YYYY-MM-DD HH:mm').toString(),
-                description: !eventFormData.newEventData.description && eventInfo.event.description,
-                itemID: item.id,
-                members: eventInfo.members.map(member => member.id)
+                itemID: item.id
             }
         }));
     }
@@ -68,17 +75,12 @@ const EventInfoModal = ({
     const onMembersChange = (members) => {
         let userIds = [];
         members.map(member => {
-            users.filter(user => user.name + " " + user.lastName === member.name + " " + member.lastName).map(user => userIds.push(user.id))
+            users.filter(user => user.name + " " + user.lastName === member.name + " " + member.lastName)
+                .map(user => userIds.push(user.id))
         })
         setEventFormData(prevState => ({
             newEventData: {
                 ...prevState.newEventData,
-                title: !eventFormData.newEventData.title && eventInfo.event.title,
-                orgUserID: !eventFormData.newEventData.orgUserId &&  eventInfo.orgUser.id,
-                itemID: !eventFormData.newEventData.itemId && eventInfo.item.id,
-                startDateTime: !eventFormData.newEventData.startDateTime && moment(eventInfo.event.startDateTime).format('YYYY-MM-DD HH:mm').toString(),
-                endDateTime: !eventFormData.newEventData.endDateTime && moment(eventInfo.event.endDateTime).format('YYYY-MM-DD HH:mm').toString(),
-                description: !eventFormData.newEventData.description && eventInfo.event.description,
                 members: userIds
             }
         }));
@@ -106,6 +108,19 @@ const EventInfoModal = ({
             });
     }
 
+    const handleDeleteEvent = () => {
+        deleteEvent(eventInfo?.event?.id)
+            .then(res => {
+                if (res.status === "success") {
+                    message.success(res.message, 5);
+                    handleCloseModal();
+                }
+            })
+            .catch(error => {
+                message.error(error.message, 5)
+            });
+    }
+
     return (
         <Modal
             title={!isEventEditing ? "Информация о событии" : `Редактирование события №${eventInfo?.event?.id}`}
@@ -121,15 +136,15 @@ const EventInfoModal = ({
         >
             {!isEventEditing ? (
                     <>
-                        <Title level={3}>{eventInfo?.event?.title}</Title>
+                        <Title level={3} className="eventTitle">{eventInfo?.event?.title}</Title>
                         {eventInfo?.orgUser?.id === user?.id || user?.role === "Admin" ?
                             <div className="modalButtonGroup">
                                 <Button style={{marginRight: '8px'}} title="Редактирвоать событие"
-                                        onClick={() => setIsEventEditing(true)}><EditOutlined/></Button>
+                                        onClick={handleEdit}><EditOutlined/></Button>
                                 <Popconfirm
                                     placement="bottomRight"
                                     title="Вы уверены, что хотите удалить событие?"
-                                    onConfirm={() => deleteEvent(eventInfo?.event?.id)}
+                                    onConfirm={handleDeleteEvent}
                                     okText="Да"
                                     cancelText="Нет"
                                 >
@@ -208,5 +223,5 @@ const EventInfoModal = ({
 
 export default connect(
     ({users}) => ({users: users.users}),
-    ({getUsers: getUsersAction, updateEvent: updateEventAction})
+    ({getUsers: getUsersAction, updateEvent: updateEventAction, deleteEvent: deleteEventAction})
 )(EventInfoModal)

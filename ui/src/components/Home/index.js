@@ -10,7 +10,7 @@ const Home = ({ user }) => {
 
     useEffect(() => {
         if (!user) navigate("/login");
-    }, [navigate]);
+    }, []);
 
     useEffect(() => {
         document.title = "Список мероприятий - Сатурн ГИС";
