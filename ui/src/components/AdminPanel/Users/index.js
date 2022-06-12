@@ -88,7 +88,7 @@ const Users = ({users, getUsers, createUser, changeUserRole}) => {
             key: "position",
             render: (_, record) => (
                 <Tag
-                    color={record.position.match(/Разработчик/) ? "purple" : record.position.match(/Разработчик/) ? "volcano" : "green"}>{record.position}</Tag>
+                    color={record.position.match(/азработчик/) ? "purple" : record.position.match(/менеджер/) ? "volcano" : "green"}>{record.position}</Tag>
             )
         },
         {
