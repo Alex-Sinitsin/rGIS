@@ -57,7 +57,7 @@ const EditableCell = ({
                     margin: 0,
                 }}
                 name={dataIndex}
-                initialValue={record.role}
+                initialValue={record.role ? record.role : "Пользователь"}
                 rules={[{required: true}]}
             >
                 <Select
