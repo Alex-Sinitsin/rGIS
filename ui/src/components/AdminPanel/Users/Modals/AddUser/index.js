@@ -22,8 +22,8 @@ const AddUserModal = ({visible, onCancel, onCreate, hideModal}) => {
                         setTimeout(() => {
                             hideModal();
                             setConfirmLoading(false);
+                            form.resetFields();
                         }, 1000);
-                        form.resetFields();
                     })
                     .catch(_ => null)
             }}
