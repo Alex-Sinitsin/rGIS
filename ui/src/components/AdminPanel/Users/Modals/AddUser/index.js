@@ -18,12 +18,16 @@ const AddUserModal = ({visible, onCancel, onCreate, hideModal}) => {
                     .validateFields()
                     .then((values) => {
                         setConfirmLoading(true);
-                        onCreate(values);
-                        setTimeout(() => {
-                            hideModal();
-                            setConfirmLoading(false);
-                            form.resetFields();
-                        }, 1000);
+                        onCreate(values)
+                            .then(res => {
+                                if (res.status === "success") {
+                                    setTimeout(() => {
+                                        setConfirmLoading(false);
+                                        hideModal();
+                                        form.resetFields();
+                                    }, 1000);
+                                }
+                            })
                     })
                     .catch(_ => null)
             }}
