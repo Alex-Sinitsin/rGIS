@@ -27,6 +27,7 @@ const AddUserModal = ({visible, onCancel, onCreate, hideModal}) => {
                                         form.resetFields();
                                     }, 1000);
                                 }
+                                setConfirmLoading(false);
                             })
                     })
                     .catch(_ => null)
