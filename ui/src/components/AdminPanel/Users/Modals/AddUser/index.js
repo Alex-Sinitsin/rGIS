@@ -17,9 +17,9 @@ const AddUserModal = ({visible, onCancel, onCreate, hideModal}) => {
                 form
                     .validateFields()
                     .then((values) => {
+                        setConfirmLoading(true);
                         onCreate(values)
                             .then(res => {
-                                setConfirmLoading(false);
                                 if (res.status === "success") {
                                     setTimeout(() => {
                                         setConfirmLoading(false);
@@ -28,9 +28,9 @@ const AddUserModal = ({visible, onCancel, onCreate, hideModal}) => {
                                     }, 1000);
                                 }
                             })
-                        setConfirmLoading(false);
+
                     })
-                    .catch(_ => null)
+                    .catch(_ => setTimeout(() => setConfirmLoading(false), 1000))
             }}
             onCancel={onCancel}
         >
@@ -88,7 +88,7 @@ const AddUserModal = ({visible, onCancel, onCreate, hideModal}) => {
                     ]}
                     hasFeedback
                 >
-                    <Input.Password />
+                    <Input.Password/>
                 </Form.Item>
 
                 <Form.Item
@@ -101,7 +101,7 @@ const AddUserModal = ({visible, onCancel, onCreate, hideModal}) => {
                             required: true,
                             message: 'Подтвердите пароль!',
                         },
-                        ({ getFieldValue }) => ({
+                        ({getFieldValue}) => ({
                             validator(_, value) {
                                 if (!value || getFieldValue('password') === value) {
                                     return Promise.resolve();
@@ -111,7 +111,7 @@ const AddUserModal = ({visible, onCancel, onCreate, hideModal}) => {
                         }),
                     ]}
                 >
-                    <Input.Password />
+                    <Input.Password/>
                 </Form.Item>
             </Form>
         </Modal>
